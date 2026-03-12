@@ -9,11 +9,11 @@ interface SettingsModalProps {
 }
 
 const ACCENT_COLORS = [
-  { id: 'teal', hex: '#c74634', label: 'Oracle Red' },
-  { id: 'copper', hex: '#e25d3f', label: 'Redwood' },
-  { id: 'gold', hex: '#f3b239', label: 'Launch Gold' },
-  { id: 'violet', hex: '#5b6dee', label: 'Cloud Blue' },
-  { id: 'lime', hex: '#4da866', label: 'Success Green' },
+  { id: 'teal', hex: '#059fc5', label: 'ReadWorks Blue' },
+  { id: 'copper', hex: '#24678d', label: 'Studio Navy' },
+  { id: 'gold', hex: '#ef8e3b', label: 'Lesson Coral' },
+  { id: 'violet', hex: '#2f6f9b', label: 'Signal Blue' },
+  { id: 'lime', hex: '#4aa36a', label: 'Partner Green' },
 ] as const;
 
 export function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
@@ -80,7 +80,7 @@ export function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
           </div>
 
           <div className="space-y-3">
-            <h3 className="text-sm font-medium text-zinc-700 dark:text-zinc-300">Oracle palette</h3>
+            <h3 className="text-sm font-medium text-zinc-700 dark:text-zinc-300">ReadWorks palette</h3>
             <div className="flex space-x-3">
               {ACCENT_COLORS.map((color) => (
                 <button

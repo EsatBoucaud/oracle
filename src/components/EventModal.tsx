@@ -119,7 +119,7 @@ export function EventModal({
             <input
               autoFocus
               type="text"
-              placeholder="Oracle meeting, launch, or review title"
+              placeholder="ReadWorks review, webinar, or partner sync"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               className="w-full border-0 border-b-2 border-transparent bg-transparent px-0 py-2 text-2xl font-semibold text-zinc-900 transition-colors placeholder:text-zinc-300 hover:border-zinc-200 focus:border-accent focus:ring-0 dark:text-zinc-100 dark:placeholder:text-zinc-600 dark:hover:border-zinc-700"
@@ -193,7 +193,7 @@ export function EventModal({
               <MapPin className="h-5 w-5 shrink-0 text-zinc-400" />
               <input
                 type="text"
-                placeholder="Add Oracle office, venue, or room"
+                placeholder="Add ReadWorks room, Zoom, or district name"
                 value={location}
                 onChange={(e) => setLocation(e.target.value)}
                 className="flex-1 border-0 border-b border-transparent bg-transparent px-0 py-2 text-sm text-zinc-900 transition-colors placeholder:text-zinc-400 hover:border-zinc-200 focus:border-accent focus:ring-0 dark:text-zinc-100 dark:placeholder:text-zinc-500 dark:hover:border-zinc-700"
@@ -203,7 +203,7 @@ export function EventModal({
             <div className="flex items-start space-x-4">
               <AlignLeft className="mt-2.5 h-5 w-5 shrink-0 text-zinc-400" />
               <textarea
-                placeholder="Add Oracle program notes"
+                placeholder="Add ReadWorks planning notes"
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 rows={3}

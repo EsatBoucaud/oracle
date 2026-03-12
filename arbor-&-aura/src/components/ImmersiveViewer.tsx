@@ -69,7 +69,7 @@ export const ImmersiveViewer: React.FC<ImmersiveViewerProps> = ({ resource, onCl
 
           {resource.type === 'text' && (
             <div className="w-full max-w-3xl mx-auto bg-zinc-900/50 p-12 md:p-24 rounded-3xl border border-white/10 shadow-2xl overflow-y-auto custom-scrollbar max-h-[85vh]">
-              <div className="font-mono text-sm tracking-[0.2em] uppercase text-indigo-400 mb-8">Oracle Brief</div>
+              <div className="font-mono text-sm tracking-[0.2em] uppercase text-indigo-400 mb-8">ReadWorks Brief</div>
               <h2 className="text-5xl md:text-6xl font-serif text-white mb-12 leading-tight">{resource.title}</h2>
               <div className="prose prose-invert prose-lg max-w-none font-serif text-white/80 leading-relaxed">
                 {resource.content?.split('\n').map((paragraph, i) => (

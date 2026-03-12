@@ -138,7 +138,7 @@ export default function App({ embedded = false }: ArborAuraAppProps) {
       if (current.color) return current.color;
       current = nodes.find(n => n.id === current?.parentId);
     }
-    return '#6366f1'; // Default indigo
+    return '#059fc5';
   }, [activeId, nodes]);
 
   return (
@@ -166,7 +166,7 @@ export default function App({ embedded = false }: ArborAuraAppProps) {
       <header className="h-14 border-b border-white/10 bg-black/40 backdrop-blur-md z-20 flex items-center justify-between px-6 shrink-0">
         <div className="flex items-center gap-8">
           <div>
-            <div className="font-serif text-xl tracking-tight italic">Oracle signal portal</div>
+            <div className="font-serif text-xl tracking-tight italic">ReadWorks signal portal</div>
             <div className="text-[10px] uppercase tracking-[0.28em] text-white/40">Built by Infogito</div>
           </div>
           
@@ -193,7 +193,7 @@ export default function App({ embedded = false }: ArborAuraAppProps) {
             className="hidden md:flex items-center gap-3 bg-white/5 border border-white/10 rounded-full pl-4 pr-2 py-1.5 text-sm w-72 hover:bg-white/10 transition-all text-white/50 hover:text-white/80"
           >
             <Search className="w-4 h-4" />
-            <span className="flex-1 text-left">Search Oracle programs...</span>
+            <span className="flex-1 text-left">Search ReadWorks programs...</span>
             <div className="flex items-center gap-1 px-2 py-0.5 rounded bg-white/10 text-[10px] font-mono">
               <Command className="w-3 h-3" /> K
             </div>
@@ -202,7 +202,7 @@ export default function App({ embedded = false }: ArborAuraAppProps) {
         <div className="flex items-center gap-4">
           <button className="text-white/50 hover:text-white transition-colors"><Bell className="w-4 h-4" /></button>
           <button className="text-white/50 hover:text-white transition-colors"><Settings className="w-4 h-4" /></button>
-          <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-indigo-500 to-purple-500 flex items-center justify-center border border-white/20">
+          <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-sky-500 to-teal-500 flex items-center justify-center border border-white/20">
             <User className="w-4 h-4 text-white" />
           </div>
         </div>

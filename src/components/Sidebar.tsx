@@ -31,6 +31,12 @@ interface SidebarProps {
   onOpenSettings: () => void;
 }
 
+const screenLabels: Record<AppScreen, string> = {
+  dashboard: 'Overview',
+  calendar: 'Calendar',
+  arbor: 'Portal',
+};
+
 export function Sidebar({
   activeScreen,
   onScreenChange,
@@ -107,15 +113,15 @@ export function Sidebar({
   return (
     <aside className="flex w-full shrink-0 flex-col overflow-hidden border-b border-white/10 bg-zinc-950/92 text-zinc-100 lg:h-full lg:w-[340px] lg:border-b-0 lg:border-r lg:border-zinc-800/80">
       <div className="border-b border-white/8 p-5 pb-4">
-        <div className="rounded-[28px] border border-white/10 bg-[linear-gradient(145deg,rgba(199,70,52,0.18),rgba(8,19,22,0.95)_60%)] p-4 shadow-[0_12px_36px_rgba(1,9,10,0.35)]">
+        <div className="rounded-[28px] border border-white/10 bg-[linear-gradient(145deg,rgba(5,159,197,0.22),rgba(6,18,22,0.96)_60%)] p-4 shadow-[0_12px_36px_rgba(1,9,10,0.35)]">
           <div className="flex items-start justify-between gap-3">
             <div className="flex items-center gap-3">
-              <div className="flex h-11 w-11 items-center justify-center rounded-2xl border border-white/10 bg-[linear-gradient(135deg,#c74634,#7f2318)] text-sm font-semibold uppercase tracking-[0.24em] text-white">
-                OR
+              <div className="flex h-11 w-11 items-center justify-center rounded-2xl border border-white/10 bg-[linear-gradient(135deg,#059fc5,#24678d)] text-sm font-semibold uppercase tracking-[0.24em] text-white">
+                RW
               </div>
               <div>
-                <p className="text-[10px] uppercase tracking-[0.35em] text-zinc-400">Oracle</p>
-                <h1 className="text-xl font-semibold tracking-tight text-white">Employee ops portal</h1>
+                <p className="text-[10px] uppercase tracking-[0.35em] text-zinc-400">ReadWorks</p>
+                <h1 className="text-xl font-semibold tracking-tight text-white">Staff ops portal</h1>
               </div>
             </div>
             <button
@@ -127,14 +133,14 @@ export function Sidebar({
           </div>
 
           <p className="mt-4 text-sm leading-6 text-zinc-300">
-            Oracle employee scheduling, event timing, and research operations in one Infogito workspace.
+            ReadWorks content planning, teacher support, and partnership operations in one Infogito workspace.
           </p>
 
           <div className="mt-5 flex rounded-2xl border border-white/10 bg-white/5 p-1">
             {[
               { id: 'dashboard', label: 'Dashboard' },
               { id: 'calendar', label: 'Calendar' },
-              { id: 'arbor', label: 'Arbor' },
+              { id: 'arbor', label: 'Portal' },
             ].map((screen) => (
               <button
                 key={screen.id}
@@ -370,7 +376,7 @@ export function Sidebar({
             <span>Portal settings</span>
           </button>
           <p className="text-center text-[11px] uppercase tracking-[0.26em] text-zinc-600">
-            Active screen: {activeScreen}
+            Active screen: {screenLabels[activeScreen]}
           </p>
         </div>
       </div>

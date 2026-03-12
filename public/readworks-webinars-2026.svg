@@ -1,0 +1,27 @@
+<svg width="1600" height="900" viewBox="0 0 1600 900" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1600" height="900" fill="#061017"/>
+  <rect x="72" y="72" width="1456" height="756" rx="36" fill="url(#bg)" stroke="rgba(255,255,255,0.12)"/>
+  <text x="118" y="186" fill="#9AE8F4" font-family="Arial, Helvetica, sans-serif" font-size="26" letter-spacing="8">WEBINARS 2026</text>
+  <text x="118" y="286" fill="white" font-family="Georgia, 'Times New Roman', serif" font-size="84">ReadWorks educator events</text>
+  <text x="118" y="352" fill="#D6EFF4" font-family="Arial, Helvetica, sans-serif" font-size="30">Public dates used in the portal's webinar operations view</text>
+
+  <rect x="118" y="432" width="1300" height="106" rx="28" fill="#0B2D39" stroke="#1A5D74"/>
+  <text x="164" y="497" fill="#9AE8F4" font-family="Arial, Helvetica, sans-serif" font-size="24">FEB 10, 2026</text>
+  <text x="438" y="497" fill="white" font-family="Georgia, 'Times New Roman', serif" font-size="46">5 ways to boost engagement with high-quality texts</text>
+
+  <rect x="118" y="566" width="1300" height="106" rx="28" fill="#102E23" stroke="#2F7E54"/>
+  <text x="164" y="631" fill="#B8ECCB" font-family="Arial, Helvetica, sans-serif" font-size="24">FEB 24, 2026</text>
+  <text x="438" y="631" fill="white" font-family="Georgia, 'Times New Roman', serif" font-size="46">Supporting diverse learners with high-quality content</text>
+
+  <rect x="118" y="700" width="1300" height="106" rx="28" fill="#502810" stroke="#B6692C"/>
+  <text x="164" y="765" fill="#FFD3A6" font-family="Arial, Helvetica, sans-serif" font-size="24">MAR 24, 2026</text>
+  <text x="438" y="765" fill="white" font-family="Georgia, 'Times New Roman', serif" font-size="46">Joint webinar with Read STOP Write</text>
+
+  <defs>
+    <linearGradient id="bg" x1="72" y1="72" x2="1528" y2="828" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0B2F3A"/>
+      <stop offset="0.58" stop-color="#133744"/>
+      <stop offset="1" stop-color="#204F66"/>
+    </linearGradient>
+  </defs>
+</svg>

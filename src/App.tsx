@@ -17,7 +17,7 @@ function MascotDock() {
     <div className="pointer-events-none fixed bottom-4 right-4 z-40 hidden sm:block">
       <div className="mascot-float flex items-end gap-3 rounded-2xl border border-white/10 bg-zinc-950/75 px-3 py-2 shadow-[0_20px_60px_rgba(2,12,15,0.45)] backdrop-blur">
         <div className="text-right">
-          <p className="text-[10px] uppercase tracking-[0.35em] text-zinc-500">Oracle</p>
+          <p className="text-[10px] uppercase tracking-[0.35em] text-zinc-500">ReadWorks</p>
           <p className="text-xs font-medium text-zinc-200">Infogito portal active</p>
         </div>
         <video
@@ -113,7 +113,7 @@ function AppContent() {
 
   return (
     <div className="relative min-h-screen overflow-hidden font-sans">
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(199,70,52,0.24),_transparent_28%),radial-gradient(circle_at_bottom_right,_rgba(243,178,57,0.16),_transparent_32%),linear-gradient(180deg,_#140806_0%,_#04090b_100%)]" />
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(5,159,197,0.24),_transparent_28%),radial-gradient(circle_at_bottom_right,_rgba(239,142,59,0.14),_transparent_32%),linear-gradient(180deg,_#071118_0%,_#02070a_100%)]" />
 
       <div className="relative p-3 sm:p-4 lg:p-6">
         <div className="glass-panel relative flex h-[calc(100vh-1.5rem)] flex-col overflow-hidden rounded-[30px] border border-white/10 bg-white/88 text-zinc-900 shadow-[0_32px_120px_rgba(3,12,15,0.48)] dark:bg-zinc-950/78 dark:text-zinc-100 lg:flex-row">
@@ -127,7 +127,7 @@ function AppContent() {
               }}
             />
           )}
-          <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(135deg,rgba(199,70,52,0.08),transparent_38%,rgba(243,178,57,0.08))]" />
+          <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(135deg,rgba(5,159,197,0.08),transparent_38%,rgba(239,142,59,0.08))]" />
 
           <div className="relative z-10 flex h-full min-h-0 w-full flex-1 flex-col lg:flex-row">
             <Sidebar
@@ -154,7 +154,7 @@ function AppContent() {
                   <section className="flex h-full min-h-0 flex-1 items-center justify-center bg-zinc-950/40">
                     <div className="rounded-3xl border border-white/10 bg-black/30 px-6 py-5 text-center backdrop-blur">
                       <p className="text-[11px] uppercase tracking-[0.3em] text-zinc-500">Loading</p>
-                      <p className="mt-2 text-sm text-zinc-200">Oracle research workspace is being prepared.</p>
+                      <p className="mt-2 text-sm text-zinc-200">ReadWorks research workspace is being prepared.</p>
                     </div>
                   </section>
                 }

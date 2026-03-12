@@ -100,7 +100,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({ isOpen, onClose,
                 type="text"
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
-                placeholder="Search Oracle workspace... (Programs, tags, content)"
+                placeholder="Search ReadWorks workspace... (Programs, tags, content)"
                 className="flex-1 bg-transparent text-xl text-white placeholder:text-white/30 focus:outline-none font-sans"
               />
               <div className="flex items-center gap-2 px-3 py-1.5 rounded-md bg-white/5 border border-white/10 text-white/40 text-xs font-mono">

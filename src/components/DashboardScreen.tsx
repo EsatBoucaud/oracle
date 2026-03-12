@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
-import { ArrowUpRight, CalendarDays, Clapperboard, RadioTower, Sparkles } from 'lucide-react';
+import { ArrowUpRight, BookOpen, CalendarDays, GraduationCap, Handshake } from 'lucide-react';
 import { format, isSameDay } from 'date-fns';
-import { CalendarEvent } from '../data/mockData';
+import { CALENDARS, CalendarEvent } from '../data/mockData';
 import { cn } from '../utils/cn';
 
 interface DashboardScreenProps {
@@ -10,34 +10,34 @@ interface DashboardScreenProps {
   onOpenCalendar: () => void;
 }
 
-const portfolioBars = [
-  { label: 'Public regions', value: 51 },
-  { label: 'Countries', value: 28 },
-  { label: 'Dedicated regions', value: 23 },
-  { label: 'Commercial regions', value: 41 },
-  { label: 'Sovereign regions', value: 2 },
+const impactBars = [
+  { label: 'Texts', display: '6,000+', height: 54 },
+  { label: 'States', display: '50', height: 42 },
+  { label: 'Educators', display: '~1M', height: 78 },
+  { label: 'Students/yr', display: '11M', height: 92 },
+  { label: 'Low-income K-8', display: '93%', height: 86 },
 ];
 
 const programSignals = [
   {
-    label: 'Oracle AI Database',
-    value: '26ai',
-    note: 'AI built into the full data and app stack',
-    width: 86,
+    label: 'Article-A-Day',
+    value: '10 min',
+    note: 'ReadWorks frames it as a short daily routine to build knowledge, vocabulary, and comprehension.',
+    width: 82,
     tone: 'teal',
   },
   {
-    label: 'AI World Tour Chicago',
-    value: 'Apr 7',
-    note: '2026 event date on the official tour schedule',
-    width: 68,
+    label: 'Top 25',
+    value: 'Jan 23',
+    note: 'ReadWorks announced its Top 25 global impact-certified nonprofit recognition on January 23, 2026.',
+    width: 66,
     tone: 'orange',
   },
   {
-    label: 'Support Rewards',
-    value: '$0.25',
-    note: 'Standard credit earned per $1 spent on OCI',
-    width: 92,
+    label: 'Mississippi',
+    value: '17k',
+    note: 'Official February 11, 2026 partnership update cites 17,000 students reached in the first two years.',
+    width: 74,
     tone: 'violet',
   },
 ];
@@ -50,51 +50,58 @@ const statusToneClasses = {
   green: 'bg-emerald-500/12 text-emerald-200 border-emerald-400/30',
 };
 
-export function DashboardScreen({ currentDate, events, onOpenCalendar }: DashboardScreenProps) {
-  const maxBarValue = Math.max(...portfolioBars.map((bar) => bar.value));
+const calendarLabelById = Object.fromEntries(CALENDARS.map((calendar) => [calendar.id, calendar.name]));
 
+export function DashboardScreen({ currentDate, events, onOpenCalendar }: DashboardScreenProps) {
   const metrics = useMemo(() => {
     const todayEvents = events.filter((event) => isSameDay(event.start, currentDate));
-    const fusionItems = events.filter((event) => event.calendarId === 'fusion-ai').length;
-    const databaseItems = events.filter((event) => event.calendarId === 'database-oci').length;
-    const eventItems = events.filter((event) => event.calendarId === 'field-events').length;
+    const articleItems = events.filter((event) => event.calendarId === 'article-a-day').length;
+    const supportItems = events.filter((event) => event.calendarId === 'teacher-support').length;
+    const partnerItems = events.filter((event) => event.calendarId === 'partnerships').length;
 
     return [
       {
         label: 'Today focus',
         value: String(todayEvents.length).padStart(2, '0'),
-        note: 'Oracle work blocks on this date',
+        note: 'ReadWorks work blocks on this date',
         icon: CalendarDays,
       },
       {
-        label: 'Fusion AI',
-        value: String(fusionItems).padStart(2, '0'),
-        note: 'Agent and applications work in view',
-        icon: Sparkles,
+        label: 'Article-A-Day',
+        value: String(articleItems).padStart(2, '0'),
+        note: 'Core reading-program items in view',
+        icon: BookOpen,
       },
       {
-        label: 'Database + OCI',
-        value: String(databaseItems).padStart(2, '0'),
-        note: 'Platform and infrastructure items active',
-        icon: Clapperboard,
+        label: 'Teacher support',
+        value: String(supportItems).padStart(2, '0'),
+        note: 'Webinars, guides, and educator follow-up',
+        icon: GraduationCap,
       },
       {
-        label: 'Field events',
-        value: String(eventItems).padStart(2, '0'),
-        note: 'JavaOne, AI World, and summit operations',
-        icon: RadioTower,
+        label: 'Partnerships',
+        value: String(partnerItems).padStart(2, '0'),
+        note: 'State and district operations currently active',
+        icon: Handshake,
       },
     ];
   }, [currentDate, events]);
 
-  const focusItems = useMemo(
-    () =>
-      events
-        .slice()
-        .sort((a, b) => a.start.getTime() - b.start.getTime())
-        .slice(0, 5),
-    [events],
-  );
+  const focusItems = useMemo(() => {
+    const now = Date.now();
+    const futureItems = events
+      .filter((event) => event.end.getTime() >= now)
+      .sort((a, b) => a.start.getTime() - b.start.getTime());
+
+    if (futureItems.length > 0) {
+      return futureItems.slice(0, 5);
+    }
+
+    return events
+      .slice()
+      .sort((a, b) => a.start.getTime() - b.start.getTime())
+      .slice(0, 5);
+  }, [events]);
 
   return (
     <section className="flex h-full flex-1 flex-col overflow-hidden bg-transparent">
@@ -103,19 +110,19 @@ export function DashboardScreen({ currentDate, events, onOpenCalendar }: Dashboa
           <div className="space-y-4">
             <div className="flex flex-wrap items-center gap-2">
               <span className="rounded-full border border-accent/25 bg-accent/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.28em] text-[color:var(--color-accent-text)] dark:text-[color:var(--color-accent)]">
-                Oracle overview
+                ReadWorks overview
               </span>
               <span className="text-xs text-zinc-500 dark:text-zinc-400">
-                Built by Infogito for Oracle field, platform, and enablement teams.
+                Built by Infogito for ReadWorks content, partnership, and teacher-support teams.
               </span>
             </div>
 
             <div>
               <h1 className="text-3xl font-semibold tracking-tight text-zinc-950 dark:text-zinc-50">
-                Oracle employee control room
+                ReadWorks operating portal
               </h1>
               <p className="mt-2 max-w-2xl text-sm leading-6 text-zinc-600 dark:text-zinc-400">
-                Keep Oracle product, event, and enablement work in one operating view. The calendar holds the live schedule and the portal holds the connected research layer.
+                Keep editorial planning, educator support, and partnership delivery in one working view. The calendar holds the live schedule and the portal screen carries the connected research layer.
               </p>
             </div>
           </div>
@@ -164,26 +171,26 @@ export function DashboardScreen({ currentDate, events, onOpenCalendar }: Dashboa
                 <div className="flex items-end justify-between gap-4">
                   <div>
                     <p className="text-[11px] uppercase tracking-[0.28em] text-zinc-500 dark:text-zinc-400">
-                      OCI footprint
+                      Impact snapshot
                     </p>
                     <h2 className="mt-2 text-2xl font-semibold tracking-tight text-zinc-950 dark:text-zinc-50">
-                      Oracle cloud network snapshot
+                      Public ReadWorks reach
                     </h2>
                   </div>
                   <p className="text-sm text-zinc-500 dark:text-zinc-400">Updated for {format(currentDate, 'MMMM d')}</p>
                 </div>
 
                 <div className="mt-8 flex h-64 items-end gap-3">
-                  {portfolioBars.map((bar) => (
+                  {impactBars.map((bar) => (
                     <div key={bar.label} className="flex flex-1 flex-col items-center gap-3">
                       <div className="relative flex h-full w-full items-end overflow-hidden rounded-[22px] bg-zinc-100 dark:bg-zinc-800">
                         <div
-                          className="w-full rounded-[22px] bg-[linear-gradient(180deg,rgba(199,70,52,0.96),rgba(243,178,57,0.82))]"
-                          style={{ height: `${(bar.value / maxBarValue) * 100}%` }}
+                          className="w-full rounded-[22px] bg-[linear-gradient(180deg,rgba(5,159,197,0.96),rgba(36,103,141,0.78))]"
+                          style={{ height: `${bar.height}%` }}
                         />
                       </div>
                       <div className="text-center">
-                        <p className="text-sm font-medium text-zinc-900 dark:text-zinc-100">{bar.value}</p>
+                        <p className="text-sm font-medium text-zinc-900 dark:text-zinc-100">{bar.display}</p>
                         <p className="text-[11px] uppercase tracking-[0.18em] text-zinc-500 dark:text-zinc-400">{bar.label}</p>
                       </div>
                     </div>
@@ -196,7 +203,7 @@ export function DashboardScreen({ currentDate, events, onOpenCalendar }: Dashboa
                   Programs in view
                 </p>
                 <h2 className="mt-2 text-2xl font-semibold tracking-tight text-zinc-950 dark:text-zinc-50">
-                  Oracle signals to track
+                  ReadWorks signals in motion
                 </h2>
 
                 <div className="mt-6 space-y-4">
@@ -211,9 +218,9 @@ export function DashboardScreen({ currentDate, events, onOpenCalendar }: Dashboa
                         <div
                           className={cn(
                             'h-full rounded-full',
-                            stat.tone === 'teal' && 'bg-[linear-gradient(90deg,#c74634,#8f2e20)]',
-                            stat.tone === 'orange' && 'bg-[linear-gradient(90deg,#e25d3f,#f3b239)]',
-                            stat.tone === 'violet' && 'bg-[linear-gradient(90deg,#5b6dee,#95a3ff)]',
+                            stat.tone === 'teal' && 'bg-[linear-gradient(90deg,#059fc5,#24678d)]',
+                            stat.tone === 'orange' && 'bg-[linear-gradient(90deg,#ef8e3b,#f4b454)]',
+                            stat.tone === 'violet' && 'bg-[linear-gradient(90deg,#2f6f9b,#4ca9c8)]',
                           )}
                           style={{ width: `${stat.width}%` }}
                         />
@@ -225,7 +232,7 @@ export function DashboardScreen({ currentDate, events, onOpenCalendar }: Dashboa
                 <div className="mt-6 rounded-2xl border border-dashed border-zinc-300/80 p-4 dark:border-zinc-700">
                   <p className="text-xs uppercase tracking-[0.26em] text-zinc-500 dark:text-zinc-400">Current read</p>
                   <p className="mt-2 text-sm leading-6 text-zinc-600 dark:text-zinc-300">
-                    The dashboard now acts as an Oracle operations surface, while the calendar handles live scheduling and the portal screen carries the deeper research context.
+                    This surface uses official ReadWorks facts for mission, programs, webinars, and partnership milestones, then wraps them in representative internal work blocks for a staff-facing operating portal.
                   </p>
                 </div>
               </div>
@@ -235,7 +242,7 @@ export function DashboardScreen({ currentDate, events, onOpenCalendar }: Dashboa
           <div className="space-y-4">
             <div className="rounded-[28px] border border-zinc-200/80 bg-zinc-950 p-5 text-zinc-100 shadow-sm dark:border-zinc-800">
               <p className="text-[11px] uppercase tracking-[0.28em] text-zinc-500">Focus queue</p>
-              <h2 className="mt-2 text-2xl font-semibold tracking-tight">What Oracle teams touch next</h2>
+              <h2 className="mt-2 text-2xl font-semibold tracking-tight">What ReadWorks teams touch next</h2>
 
               <div className="mt-6 space-y-3">
                 {focusItems.map((item) => (
@@ -253,7 +260,7 @@ export function DashboardScreen({ currentDate, events, onOpenCalendar }: Dashboa
                           statusToneClasses[item.color],
                         )}
                       >
-                        {item.calendarId}
+                        {calendarLabelById[item.calendarId] ?? item.calendarId}
                       </span>
                     </div>
                     {item.location && <p className="mt-3 text-sm text-zinc-300">{item.location}</p>}
@@ -267,25 +274,25 @@ export function DashboardScreen({ currentDate, events, onOpenCalendar }: Dashboa
                 Delivery ladder
               </p>
               <h2 className="mt-2 text-2xl font-semibold tracking-tight text-zinc-950 dark:text-zinc-50">
-                Sample Oracle release stages
+                Sample ReadWorks delivery stages
               </h2>
 
               <div className="mt-6 space-y-4">
                 {[
                   {
                     stage: 'Plan',
-                    count: 5,
-                    description: 'Scope product narrative, field enablement, and event dependencies around official Oracle programs.',
+                    count: 4,
+                    description: 'Scope program framing around Article-A-Day, Book Studies, partnerships, and webinar support.',
                   },
                   {
-                    stage: 'Validate',
-                    count: 8,
-                    description: 'Review architecture notes, AI use cases, and certification or speaker content before release.',
+                    stage: 'Review',
+                    count: 7,
+                    description: 'Check curriculum notes, district messaging, accessibility details, and teacher-facing support copy.',
                   },
                   {
-                    stage: 'Launch',
+                    stage: 'Publish',
                     count: 3,
-                    description: 'Push live event support, enablement updates, and customer-facing program assets.',
+                    description: 'Ship updated guides, partner materials, and live webinar support assets tied to public ReadWorks programs.',
                   },
                 ].map((item, index) => (
                   <div key={item.stage} className="flex items-start gap-4">

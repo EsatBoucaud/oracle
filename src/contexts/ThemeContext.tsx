@@ -14,8 +14,8 @@ interface ThemeContextType {
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
-const MODE_KEY = 'oracle-portal-theme-mode';
-const ACCENT_KEY = 'oracle-portal-theme-accent';
+const MODE_KEY = 'readworks-portal-theme-mode';
+const ACCENT_KEY = 'readworks-portal-theme-accent';
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const [mode, setMode] = useState<ThemeMode>(() => {
@@ -40,39 +40,39 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     const colors = {
       teal: {
-        base: '#c74634',
-        light: '#fdf0ed',
-        darkLight: '#431510',
-        text: '#9d2f21',
-        darkText: '#ffb5ab',
+        base: '#059fc5',
+        light: '#e7f8fc',
+        darkLight: '#0b2f3a',
+        text: '#0b718d',
+        darkText: '#8fe7f7',
       },
       copper: {
-        base: '#e25d3f',
-        light: '#fff2ed',
-        darkLight: '#4d1c12',
-        text: '#b4442c',
-        darkText: '#ffc4b4',
+        base: '#24678d',
+        light: '#edf4f8',
+        darkLight: '#132d3f',
+        text: '#1f5877',
+        darkText: '#acd7ee',
       },
       gold: {
-        base: '#f3b239',
-        light: '#fff8e8',
-        darkLight: '#50340a',
-        text: '#a56b06',
-        darkText: '#f9d98d',
+        base: '#ef8e3b',
+        light: '#fff3e9',
+        darkLight: '#4d2710',
+        text: '#a95a16',
+        darkText: '#ffd0a8',
       },
       violet: {
-        base: '#5b6dee',
-        light: '#eef1ff',
-        darkLight: '#1c255d',
-        text: '#3f50c3',
-        darkText: '#bbc5ff',
+        base: '#2f6f9b',
+        light: '#edf5fa',
+        darkLight: '#143247',
+        text: '#245979',
+        darkText: '#abd7f1',
       },
       lime: {
-        base: '#4da866',
-        light: '#edf8f0',
-        darkLight: '#153720',
-        text: '#2d7a42',
-        darkText: '#a9efbc',
+        base: '#4aa36a',
+        light: '#edf8f1',
+        darkLight: '#173523',
+        text: '#2f7f4c',
+        darkText: '#aee5bf',
       },
     };
 

@@ -409,12 +409,12 @@ export function MainContent({
         caption: 'Items locked to this date',
       },
       {
-        label: 'Fusion AI',
-        value: events.filter((event) => event.calendarId === 'fusion-ai').length,
-        caption: 'Agent and app items in view',
+        label: 'Teacher support',
+        value: events.filter((event) => event.calendarId === 'teacher-support').length,
+        caption: 'Guides, webinars, and follow-up work',
       },
       {
-        label: 'Live briefings',
+        label: 'Live sessions',
         value: events.filter((event) => event.icon === 'video').length,
         caption: 'Remote reviews still in play',
       },
@@ -429,10 +429,10 @@ export function MainContent({
           <div className="space-y-3">
             <div className="flex flex-wrap items-center gap-2">
               <span className="rounded-full border border-accent/25 bg-accent/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.28em] text-[color:var(--color-accent-text)] dark:text-[color:var(--color-accent)]">
-                Oracle operations board
+                ReadWorks operating board
               </span>
               <span className="text-xs text-zinc-500 dark:text-zinc-400">
-                Working window for Oracle launches, field events, and enablement.
+                Working window for ReadWorks programs, webinars, and partner work.
               </span>
             </div>
 
@@ -441,7 +441,7 @@ export function MainContent({
                 {getHeaderLabel()}
               </h1>
               <p className="mt-1 text-sm text-zinc-600 dark:text-zinc-400">
-                Keep Oracle scheduling front and center. The overview stays on the dashboard screen.
+                Keep ReadWorks scheduling front and center. The overview stays on the dashboard screen.
               </p>
               <p className="mt-2 text-sm font-medium text-zinc-700 dark:text-zinc-300">
                 {visibleEvents.length} pre-filled item{visibleEvents.length === 1 ? '' : 's'} in this {view.toLowerCase()} view.
@@ -471,7 +471,7 @@ export function MainContent({
               <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400 dark:text-zinc-500" />
               <input
                 type="text"
-                placeholder="Search Oracle products, events, or locations"
+                placeholder="Search ReadWorks programs, webinars, or districts"
                 value={searchQuery}
                 onChange={(e) => onSearchChange(e.target.value)}
                 className="w-full rounded-2xl border border-zinc-200/70 bg-white/85 py-3 pl-10 pr-4 text-sm outline-none transition-all focus:border-accent focus:ring-4 focus:ring-accent/10 dark:border-zinc-700/80 dark:bg-zinc-900/80 dark:text-zinc-100 dark:placeholder-zinc-500"
@@ -550,7 +550,7 @@ export function MainContent({
                     No scheduled items in this {view.toLowerCase()} window
                   </p>
                   <p className="text-sm text-zinc-600 dark:text-zinc-400">
-                    Jump back to the nearest Oracle program block.
+                    Jump back to the nearest ReadWorks work block.
                   </p>
                 </div>
                 {nextScheduledEvent && (

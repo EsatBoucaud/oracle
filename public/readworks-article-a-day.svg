@@ -1,0 +1,30 @@
+<svg width="1600" height="900" viewBox="0 0 1600 900" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1600" height="900" fill="#07131A"/>
+  <rect x="72" y="72" width="1456" height="756" rx="36" fill="url(#bg)" stroke="rgba(255,255,255,0.12)"/>
+  <text x="118" y="190" fill="#FFE0C5" font-family="Arial, Helvetica, sans-serif" font-size="26" letter-spacing="8">CLASSROOM PROGRAMS</text>
+  <text x="118" y="286" fill="white" font-family="Georgia, 'Times New Roman', serif" font-size="86">Article-A-Day and StepReads</text>
+  <text x="118" y="356" fill="#F8E6D4" font-family="Arial, Helvetica, sans-serif" font-size="30">Daily knowledge-building routines with differentiated reading support</text>
+
+  <rect x="118" y="438" width="410" height="248" rx="30" fill="#522B10" stroke="#B9692B"/>
+  <text x="154" y="500" fill="#FFD3A6" font-family="Arial, Helvetica, sans-serif" font-size="24">Article-A-Day</text>
+  <text x="154" y="572" fill="white" font-family="Georgia, 'Times New Roman', serif" font-size="64">10 minutes</text>
+  <text x="154" y="628" fill="#FCE9D4" font-family="Arial, Helvetica, sans-serif" font-size="26">Short daily routine for knowledge, vocabulary, and comprehension.</text>
+
+  <rect x="566" y="438" width="410" height="248" rx="30" fill="#10374A" stroke="#2A7FA3"/>
+  <text x="602" y="500" fill="#A6E8F8" font-family="Arial, Helvetica, sans-serif" font-size="24">StepReads</text>
+  <text x="602" y="572" fill="white" font-family="Georgia, 'Times New Roman', serif" font-size="64">Differentiated</text>
+  <text x="602" y="628" fill="#D5F2F9" font-family="Arial, Helvetica, sans-serif" font-size="26">Helps more students stay inside the same content sequence.</text>
+
+  <rect x="1014" y="438" width="410" height="248" rx="30" fill="#133424" stroke="#2E7C52"/>
+  <text x="1050" y="500" fill="#B8ECCB" font-family="Arial, Helvetica, sans-serif" font-size="24">Support layer</text>
+  <text x="1050" y="572" fill="white" font-family="Georgia, 'Times New Roman', serif" font-size="64">Teacher guide</text>
+  <text x="1050" y="628" fill="#D8F6E2" font-family="Arial, Helvetica, sans-serif" font-size="26">Planning notes, routines, and classroom implementation help.</text>
+
+  <defs>
+    <linearGradient id="bg" x1="72" y1="72" x2="1528" y2="828" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#6A3815"/>
+      <stop offset="0.56" stop-color="#284B5B"/>
+      <stop offset="1" stop-color="#0D2430"/>
+    </linearGradient>
+  </defs>
+</svg>
