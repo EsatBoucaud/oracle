@@ -1,0 +1,96 @@
+@font-face {
+  font-family: "Mona Sans";
+  src: url("./assets/fonts/Mona-Sans.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 200 900;
+  font-display: swap;
+}
+
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Mona Sans", "Segoe UI", ui-sans-serif, system-ui, sans-serif;
+  --color-accent: var(--color-accent);
+  --color-accent-light: var(--color-accent-light);
+  --color-accent-text: var(--color-accent-text);
+}
+
+:root {
+  color-scheme: dark;
+  --color-accent: #c74634;
+  --color-accent-light: #fdf0ed;
+  --color-accent-text: #9d2f21;
+}
+
+.dark {
+  --color-accent: #c74634;
+  --color-accent-light: #431510;
+  --color-accent-text: #ffb5ab;
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  background: #04090b;
+  color: #f5f7f7;
+  font-family: var(--font-sans);
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at top left, rgba(199, 70, 52, 0.14), transparent 28%),
+    radial-gradient(circle at bottom right, rgba(243, 178, 57, 0.08), transparent 30%);
+}
+
+::selection {
+  background: rgba(199, 70, 52, 0.3);
+  color: #ffffff;
+}
+
+@layer utilities {
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background-color: rgba(156, 163, 175, 0.5);
+    border-radius: 20px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(107, 114, 128, 0.8);
+  }
+
+  .glass-panel {
+    backdrop-filter: blur(24px);
+  }
+
+  .mascot-float {
+    animation: mascot-float 5s ease-in-out infinite;
+  }
+}
+
+@keyframes mascot-float {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}

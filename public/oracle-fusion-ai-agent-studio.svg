@@ -1,0 +1,27 @@
+<svg width="1200" height="900" viewBox="0 0 1200 900" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="900" fill="#0C1017"/>
+  <rect x="48" y="48" width="1104" height="804" rx="40" fill="url(#paint0_linear)"/>
+  <rect x="84" y="84" width="1032" height="732" rx="32" fill="#0E131B" fill-opacity="0.84" stroke="#FFFFFF" stroke-opacity="0.12"/>
+  <text x="116" y="164" fill="#C7D0FF" font-family="Arial, Helvetica, sans-serif" font-size="28" letter-spacing="10">FUSION AI</text>
+  <text x="116" y="274" fill="white" font-family="Georgia, 'Times New Roman', serif" font-size="74">AI Agent Studio</text>
+  <text x="116" y="334" fill="#E4E7F5" font-family="Arial, Helvetica, sans-serif" font-size="30">Built natively in Oracle Fusion Applications</text>
+  <text x="116" y="376" fill="#E4E7F5" font-family="Arial, Helvetica, sans-serif" font-size="30">Runs on Oracle Cloud Infrastructure</text>
+  <rect x="116" y="470" width="310" height="170" rx="26" fill="#5B6DEE" fill-opacity="0.18" stroke="#5B6DEE" stroke-opacity="0.45"/>
+  <text x="146" y="534" fill="white" font-family="Arial, Helvetica, sans-serif" font-size="28">Create</text>
+  <text x="146" y="572" fill="#CCD3FF" font-family="Arial, Helvetica, sans-serif" font-size="22">Package AI agents</text>
+  <rect x="452" y="470" width="310" height="170" rx="26" fill="#C74634" fill-opacity="0.18" stroke="#C74634" stroke-opacity="0.45"/>
+  <text x="482" y="534" fill="white" font-family="Arial, Helvetica, sans-serif" font-size="28">Manage</text>
+  <text x="482" y="572" fill="#FFD3CC" font-family="Arial, Helvetica, sans-serif" font-size="22">Govern rollout and approvals</text>
+  <rect x="788" y="470" width="272" height="170" rx="26" fill="#4DA866" fill-opacity="0.18" stroke="#4DA866" stroke-opacity="0.45"/>
+  <text x="818" y="534" fill="white" font-family="Arial, Helvetica, sans-serif" font-size="28">Deploy</text>
+  <text x="818" y="572" fill="#D4F4DD" font-family="Arial, Helvetica, sans-serif" font-size="22">Support Oracle teams</text>
+  <circle cx="924" cy="226" r="138" fill="#5B6DEE" fill-opacity="0.16"/>
+  <circle cx="1008" cy="266" r="186" fill="#C74634" fill-opacity="0.12"/>
+  <defs>
+    <linearGradient id="paint0_linear" x1="92" y1="70" x2="1112" y2="838" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#18203C"/>
+      <stop offset="0.56" stop-color="#12151E"/>
+      <stop offset="1" stop-color="#26120F"/>
+    </linearGradient>
+  </defs>
+</svg>
