@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { ArrowUpRight, BookOpen, CalendarDays, GraduationCap, Handshake } from 'lucide-react';
+import { ArrowUpRight, BookOpen, CalendarDays, GraduationCap, Handshake, Sparkles } from 'lucide-react';
 import { format, isSameDay } from 'date-fns';
 import { CALENDARS, CalendarEvent } from '../data/mockData';
 import { cn } from '../utils/cn';
@@ -11,35 +11,48 @@ interface DashboardScreenProps {
 }
 
 const impactBars = [
-  { label: 'Texts', display: '6,000+', height: 54 },
-  { label: 'States', display: '50', height: 42 },
-  { label: 'Educators', display: '~1M', height: 78 },
-  { label: 'Students/yr', display: '11M', height: 92 },
-  { label: 'Low-income K-8', display: '93%', height: 86 },
+  { label: 'Texts', display: '6,000+', height: 52 },
+  { label: 'States', display: '50', height: 40 },
+  { label: 'Teachers', display: '1M+', height: 68 },
+  { label: 'Students', display: '17M', height: 90 },
+  { label: 'Tier-3', display: 'ESSA', height: 62 },
 ];
 
 const programSignals = [
   {
     label: 'Article-A-Day',
-    value: '10 min',
-    note: 'ReadWorks frames it as a short daily routine to build knowledge, vocabulary, and comprehension.',
-    width: 82,
+    value: '10-15',
+    note: 'Official positioning: a short daily routine built for knowledge, vocabulary, and comprehension.',
+    width: 84,
     tone: 'teal',
   },
   {
-    label: 'Top 25',
-    value: 'Jan 23',
-    note: 'ReadWorks announced its Top 25 global impact-certified nonprofit recognition on January 23, 2026.',
-    width: 66,
+    label: 'Survey 2025',
+    value: '95%',
+    note: 'ReadWorks reported 95% satisfaction in the Fall 2025 survey of nearly 7,000 users.',
+    width: 78,
     tone: 'orange',
   },
   {
     label: 'Mississippi',
-    value: '17k',
-    note: 'Official February 11, 2026 partnership update cites 17,000 students reached in the first two years.',
-    width: 74,
+    value: '7,000+',
+    note: 'Official 2026 partnership update says more than 7,000 reading specialists and paraprofessionals use the platform.',
+    width: 72,
     tone: 'violet',
   },
+  {
+    label: 'Integrations',
+    value: '3',
+    note: 'ReadWorks highlights ClassLink, Clever, and Google Classroom in its onboarding ecosystem.',
+    width: 58,
+    tone: 'green',
+  },
+];
+
+const researchNotes = [
+  'ReadWorks says it serves all 50 states and reaches 93% of the nation’s lowest-income K-8 schools.',
+  'The action research guide gives teachers a six-week intervention model using Article-A-Day and decodables.',
+  'The portal uses official webinar dates and support pages, then layers representative staff work on top.',
 ];
 
 const statusToneClasses = {
@@ -58,6 +71,7 @@ export function DashboardScreen({ currentDate, events, onOpenCalendar }: Dashboa
     const articleItems = events.filter((event) => event.calendarId === 'article-a-day').length;
     const supportItems = events.filter((event) => event.calendarId === 'teacher-support').length;
     const partnerItems = events.filter((event) => event.calendarId === 'partnerships').length;
+    const curriculumItems = events.filter((event) => event.calendarId === 'curriculum-lab').length;
 
     return [
       {
@@ -79,10 +93,10 @@ export function DashboardScreen({ currentDate, events, onOpenCalendar }: Dashboa
         icon: GraduationCap,
       },
       {
-        label: 'Partnerships',
-        value: String(partnerItems).padStart(2, '0'),
-        note: 'State and district operations currently active',
-        icon: Handshake,
+        label: 'Curriculum lab',
+        value: String(curriculumItems + partnerItems).padStart(2, '0'),
+        note: 'Curriculum systems, partnerships, and rollout work',
+        icon: Sparkles,
       },
     ];
   }, [currentDate, events]);
@@ -94,13 +108,13 @@ export function DashboardScreen({ currentDate, events, onOpenCalendar }: Dashboa
       .sort((a, b) => a.start.getTime() - b.start.getTime());
 
     if (futureItems.length > 0) {
-      return futureItems.slice(0, 5);
+      return futureItems.slice(0, 6);
     }
 
     return events
       .slice()
       .sort((a, b) => a.start.getTime() - b.start.getTime())
-      .slice(0, 5);
+      .slice(0, 6);
   }, [events]);
 
   return (
@@ -121,8 +135,8 @@ export function DashboardScreen({ currentDate, events, onOpenCalendar }: Dashboa
               <h1 className="text-3xl font-semibold tracking-tight text-zinc-950 dark:text-zinc-50">
                 ReadWorks operating portal
               </h1>
-              <p className="mt-2 max-w-2xl text-sm leading-6 text-zinc-600 dark:text-zinc-400">
-                Keep editorial planning, educator support, and partnership delivery in one working view. The calendar holds the live schedule and the portal screen carries the connected research layer.
+              <p className="mt-2 max-w-3xl text-sm leading-6 text-zinc-600 dark:text-zinc-400">
+                Keep editorial planning, educator support, district partnerships, and research-backed messaging in one working view. The calendar drives live operations while the portal screen stores deeper program and evidence context.
               </p>
             </div>
           </div>
@@ -166,7 +180,7 @@ export function DashboardScreen({ currentDate, events, onOpenCalendar }: Dashboa
               })}
             </div>
 
-            <div className="grid gap-4 lg:grid-cols-[1.1fr_0.9fr]">
+            <div className="grid gap-4 lg:grid-cols-[1.06fr_0.94fr]">
               <div className="rounded-[28px] border border-zinc-200/80 bg-white/85 p-5 shadow-sm dark:border-zinc-800 dark:bg-zinc-900/70">
                 <div className="flex items-end justify-between gap-4">
                   <div>
@@ -196,44 +210,68 @@ export function DashboardScreen({ currentDate, events, onOpenCalendar }: Dashboa
                     </div>
                   ))}
                 </div>
-              </div>
-
-              <div className="rounded-[28px] border border-zinc-200/80 bg-white/85 p-5 shadow-sm dark:border-zinc-800 dark:bg-zinc-900/70">
-                <p className="text-[11px] uppercase tracking-[0.28em] text-zinc-500 dark:text-zinc-400">
-                  Programs in view
-                </p>
-                <h2 className="mt-2 text-2xl font-semibold tracking-tight text-zinc-950 dark:text-zinc-50">
-                  ReadWorks signals in motion
-                </h2>
-
-                <div className="mt-6 space-y-4">
-                  {programSignals.map((stat) => (
-                    <div key={stat.label} className="rounded-2xl border border-zinc-200/70 bg-zinc-50/70 p-4 dark:border-zinc-800 dark:bg-zinc-950/55">
-                      <div className="flex items-center justify-between gap-4">
-                        <p className="text-sm font-medium text-zinc-900 dark:text-zinc-100">{stat.label}</p>
-                        <p className="text-lg font-semibold text-zinc-950 dark:text-zinc-50">{stat.value}</p>
-                      </div>
-                      <p className="mt-2 text-sm text-zinc-600 dark:text-zinc-400">{stat.note}</p>
-                      <div className="mt-3 h-2 overflow-hidden rounded-full bg-zinc-200 dark:bg-zinc-800">
-                        <div
-                          className={cn(
-                            'h-full rounded-full',
-                            stat.tone === 'teal' && 'bg-[linear-gradient(90deg,#059fc5,#24678d)]',
-                            stat.tone === 'orange' && 'bg-[linear-gradient(90deg,#ef8e3b,#f4b454)]',
-                            stat.tone === 'violet' && 'bg-[linear-gradient(90deg,#2f6f9b,#4ca9c8)]',
-                          )}
-                          style={{ width: `${stat.width}%` }}
-                        />
-                      </div>
-                    </div>
-                  ))}
-                </div>
 
                 <div className="mt-6 rounded-2xl border border-dashed border-zinc-300/80 p-4 dark:border-zinc-700">
-                  <p className="text-xs uppercase tracking-[0.26em] text-zinc-500 dark:text-zinc-400">Current read</p>
-                  <p className="mt-2 text-sm leading-6 text-zinc-600 dark:text-zinc-300">
-                    This surface uses official ReadWorks facts for mission, programs, webinars, and partnership milestones, then wraps them in representative internal work blocks for a staff-facing operating portal.
+                  <p className="text-xs uppercase tracking-[0.26em] text-zinc-500 dark:text-zinc-400">Research notes</p>
+                  <div className="mt-3 space-y-3">
+                    {researchNotes.map((note) => (
+                      <p key={note} className="text-sm leading-6 text-zinc-600 dark:text-zinc-300">
+                        {note}
+                      </p>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              <div className="space-y-4">
+                <div className="rounded-[28px] border border-zinc-200/80 bg-white/85 p-5 shadow-sm dark:border-zinc-800 dark:bg-zinc-900/70">
+                  <p className="text-[11px] uppercase tracking-[0.28em] text-zinc-500 dark:text-zinc-400">
+                    Programs in view
                   </p>
+                  <h2 className="mt-2 text-2xl font-semibold tracking-tight text-zinc-950 dark:text-zinc-50">
+                    ReadWorks signals in motion
+                  </h2>
+
+                  <div className="mt-6 space-y-4">
+                    {programSignals.map((stat) => (
+                      <div key={stat.label} className="rounded-2xl border border-zinc-200/70 bg-zinc-50/70 p-4 dark:border-zinc-800 dark:bg-zinc-950/55">
+                        <div className="flex items-center justify-between gap-4">
+                          <p className="text-sm font-medium text-zinc-900 dark:text-zinc-100">{stat.label}</p>
+                          <p className="text-lg font-semibold text-zinc-950 dark:text-zinc-50">{stat.value}</p>
+                        </div>
+                        <p className="mt-2 text-sm text-zinc-600 dark:text-zinc-400">{stat.note}</p>
+                        <div className="mt-3 h-2 overflow-hidden rounded-full bg-zinc-200 dark:bg-zinc-800">
+                          <div
+                            className={cn(
+                              'h-full rounded-full',
+                              stat.tone === 'teal' && 'bg-[linear-gradient(90deg,#059fc5,#24678d)]',
+                              stat.tone === 'orange' && 'bg-[linear-gradient(90deg,#ef8e3b,#f4b454)]',
+                              stat.tone === 'violet' && 'bg-[linear-gradient(90deg,#2f6f9b,#4ca9c8)]',
+                              stat.tone === 'green' && 'bg-[linear-gradient(90deg,#4aa36a,#9fd4ae)]',
+                            )}
+                            style={{ width: `${stat.width}%` }}
+                          />
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="rounded-[28px] border border-zinc-200/80 bg-zinc-950 p-5 text-zinc-100 shadow-sm dark:border-zinc-800">
+                  <p className="text-[11px] uppercase tracking-[0.28em] text-zinc-500">Evidence and ops</p>
+                  <div className="mt-4 grid gap-3 sm:grid-cols-3">
+                    {[
+                      { label: 'ESSA', value: 'Tier-3', note: 'Promising evidence on the official impact page' },
+                      { label: 'Survey', value: '6,956', note: 'Participants in the Fall 2025 user survey' },
+                      { label: 'Mississippi', value: '87%', note: 'Registered educators in higher free-lunch schools' },
+                    ].map((item) => (
+                      <div key={item.label} className="rounded-2xl border border-white/8 bg-white/5 p-4">
+                        <p className="text-[11px] uppercase tracking-[0.22em] text-zinc-500">{item.label}</p>
+                        <p className="mt-3 text-2xl font-semibold text-white">{item.value}</p>
+                        <p className="mt-2 text-sm leading-6 text-zinc-400">{item.note}</p>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>
@@ -281,18 +319,18 @@ export function DashboardScreen({ currentDate, events, onOpenCalendar }: Dashboa
                 {[
                   {
                     stage: 'Plan',
-                    count: 4,
+                    count: 5,
                     description: 'Scope program framing around Article-A-Day, Book Studies, partnerships, and webinar support.',
                   },
                   {
-                    stage: 'Review',
-                    count: 7,
-                    description: 'Check curriculum notes, district messaging, accessibility details, and teacher-facing support copy.',
+                    stage: 'Validate',
+                    count: 8,
+                    description: 'Check evidence language, partner messaging, accessibility notes, and teacher-facing implementation details.',
                   },
                   {
                     stage: 'Publish',
-                    count: 3,
-                    description: 'Ship updated guides, partner materials, and live webinar support assets tied to public ReadWorks programs.',
+                    count: 4,
+                    description: 'Ship updated guides, partner materials, and live webinar support assets tied to official ReadWorks programs.',
                   },
                 ].map((item, index) => (
                   <div key={item.stage} className="flex items-start gap-4">

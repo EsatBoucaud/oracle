@@ -1,0 +1,30 @@
+<svg width="1600" height="900" viewBox="0 0 1600 900" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1600" height="900" fill="#081117"/>
+  <rect x="72" y="72" width="1456" height="756" rx="36" fill="url(#bg)" stroke="rgba(255,255,255,0.12)"/>
+  <text x="118" y="184" fill="#B8ECCB" font-family="Arial, Helvetica, sans-serif" font-size="26" letter-spacing="8">ACTION RESEARCH</text>
+  <text x="118" y="286" fill="white" font-family="Georgia, 'Times New Roman', serif" font-size="84">K-2 intervention guide</text>
+  <text x="118" y="352" fill="#D7F3E0" font-family="Arial, Helvetica, sans-serif" font-size="30">Official ReadWorks support for six-week classroom research cycles</text>
+
+  <rect x="118" y="430" width="416" height="252" rx="30" fill="#103224" stroke="#2C7950"/>
+  <text x="154" y="500" fill="#B8ECCB" font-family="Arial, Helvetica, sans-serif" font-size="24">Duration</text>
+  <text x="154" y="578" fill="white" font-family="Georgia, 'Times New Roman', serif" font-size="74">6 weeks</text>
+  <text x="154" y="640" fill="#D7F3E0" font-family="Arial, Helvetica, sans-serif" font-size="26">Structured intervention cycle for data-informed literacy support.</text>
+
+  <rect x="576" y="430" width="416" height="252" rx="30" fill="#0C2734" stroke="#1E5B72"/>
+  <text x="612" y="500" fill="#A4E7F6" font-family="Arial, Helvetica, sans-serif" font-size="24">Program blend</text>
+  <text x="612" y="578" fill="white" font-family="Georgia, 'Times New Roman', serif" font-size="70">AAD + decodables</text>
+  <text x="612" y="640" fill="#D7EEF5" font-family="Arial, Helvetica, sans-serif" font-size="26">Built around Article-A-Day plus early literacy decoding support.</text>
+
+  <rect x="1034" y="430" width="390" height="252" rx="30" fill="#4F2810" stroke="#B4692C"/>
+  <text x="1070" y="500" fill="#FFD3A6" font-family="Arial, Helvetica, sans-serif" font-size="24">Classroom use</text>
+  <text x="1070" y="578" fill="white" font-family="Georgia, 'Times New Roman', serif" font-size="70">Research-ready</text>
+  <text x="1070" y="640" fill="#FCE9D4" font-family="Arial, Helvetica, sans-serif" font-size="26">Supports teachers who want evidence-backed intervention routines.</text>
+
+  <defs>
+    <linearGradient id="bg" x1="72" y1="72" x2="1528" y2="828" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#173523"/>
+      <stop offset="0.55" stop-color="#123142"/>
+      <stop offset="1" stop-color="#5A2B12"/>
+    </linearGradient>
+  </defs>
+</svg>

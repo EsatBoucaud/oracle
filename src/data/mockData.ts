@@ -43,7 +43,7 @@ export const mockEvents: CalendarEvent[] = [
     color: 'blue',
     calendarId: 'article-a-day',
     description:
-      'Review the week sequence for Article-A-Day, which ReadWorks positions as a 10-minute daily routine to build background knowledge, vocabulary, and comprehension.',
+      'Review the week sequence for Article-A-Day, which ReadWorks positions as a 10 to 15 minute daily routine that builds background knowledge, vocabulary, and reading stamina.',
     location: 'Content studio',
   },
   {
@@ -55,7 +55,7 @@ export const mockEvents: CalendarEvent[] = [
     icon: 'video',
     calendarId: 'article-a-day',
     description:
-      'Check leveled passage pairings and teacher notes for StepReads before the next classroom-facing update.',
+      'Check leveled passage pairings, boost and challenge article links, and teacher notes for the next classroom-facing StepReads update.',
     location: 'Remote editorial room',
   },
   {
@@ -66,7 +66,7 @@ export const mockEvents: CalendarEvent[] = [
     color: 'orange',
     calendarId: 'curriculum-lab',
     description:
-      'Review filters, discovery paths, and teacher feedback around the ReadWorks advanced search experience.',
+      'Review filters, discovery paths, and teacher feedback around the ReadWorks advanced search experience so teams can find connected content faster.',
     location: 'Product and curriculum pod',
   },
   {
@@ -78,7 +78,7 @@ export const mockEvents: CalendarEvent[] = [
     calendarId: 'teacher-support',
     isAllDay: true,
     description:
-      'Working block for teacher guide updates, classroom routine notes, and webinar follow-up materials.',
+      'Working block for teacher guide updates, science-of-reading framing, classroom-routine notes, and webinar follow-up materials.',
   },
   {
     id: '5',
@@ -88,7 +88,7 @@ export const mockEvents: CalendarEvent[] = [
     color: 'orange',
     calendarId: 'curriculum-lab',
     description:
-      'Audit bilingual text pair metadata and classroom guidance before the next support release.',
+      'Audit bilingual text pair metadata, ELL support notes, and assignment pathways before the next support release.',
     location: 'Bilingual resources desk',
   },
   {
@@ -100,12 +100,12 @@ export const mockEvents: CalendarEvent[] = [
     icon: 'video',
     calendarId: 'partnerships',
     description:
-      'Use the February 11, 2026 Mississippi update as the briefing base: 20% of educators registered, 17,000 students reached in the first two years, and 87% of registered educators work in schools with 50% or more free or reduced lunch enrollment.',
+      'Use the February 11, 2026 Mississippi update as the briefing base: more than 7,000 reading specialists and paraprofessionals use ReadWorks, representing 20% of Mississippi educators, with 17,000 students reached over the first two years of support.',
     location: 'State partnership bridge',
   },
   {
     id: '7',
-    title: 'Research loops planning session',
+    title: 'Research Loops planning session',
     start: at(2, 9),
     end: at(2, 10),
     color: 'orange',
@@ -122,7 +122,7 @@ export const mockEvents: CalendarEvent[] = [
     color: 'green',
     calendarId: 'teacher-support',
     description:
-      'Prepare host notes, classroom examples, and Q&A guidance for upcoming educator webinars.',
+      'Prepare host notes, classroom examples, and Q&A guidance for upcoming educator webinars led by Tamika Reece.',
     location: 'Teacher support hub',
   },
   {
@@ -155,7 +155,7 @@ export const mockEvents: CalendarEvent[] = [
     color: 'blue',
     calendarId: 'article-a-day',
     description:
-      'Refresh the public-facing fact stack around 6,000 plus texts, nearly 1 million educators, and 11 million students each school year.',
+      'Refresh the public-facing fact stack around 6,000 plus texts, all 50 states, more than 1 million teachers over time, and 17 million students reached.',
     location: 'Program operations desk',
   },
   {
@@ -166,7 +166,7 @@ export const mockEvents: CalendarEvent[] = [
     color: 'orange',
     calendarId: 'curriculum-lab',
     description:
-      'Confirm that standards and curriculum alignment references stay current across state and district-facing materials.',
+      'Confirm that curriculum support pages for CKLA, NGSS, Wit & Wisdom, and district-facing alignment notes are still accurate.',
     location: 'Alignment operations',
   },
   {
@@ -177,7 +177,7 @@ export const mockEvents: CalendarEvent[] = [
     color: 'purple',
     calendarId: 'partnerships',
     description:
-      'Pull statewide and district partner examples for the next partner-facing ReadWorks overview deck.',
+      'Pull statewide and district partner examples for the next ReadWorks overview deck, including evidence, adoption, and implementation support.',
     location: 'Partnership narrative board',
   },
   {
@@ -200,7 +200,7 @@ export const mockEvents: CalendarEvent[] = [
     calendarId: 'curriculum-lab',
     isAllDay: true,
     description:
-      'Dedicated working block for Research Loops topic framing, article sequencing, and instructional support notes.',
+      'Dedicated working block for Research Loops topic framing, article sequencing, assessment notes, and instructional support planning.',
   },
   {
     id: '16',
@@ -222,7 +222,7 @@ export const mockEvents: CalendarEvent[] = [
     icon: 'video',
     calendarId: 'article-a-day',
     description:
-      'Check reading-level labels, usability notes, and support assets for differentiated classroom use.',
+      'Check reading-level labels, audio support pathways, and differentiation notes for classroom use.',
     location: 'Remote accessibility review',
   },
   {
@@ -233,7 +233,7 @@ export const mockEvents: CalendarEvent[] = [
     color: 'purple',
     calendarId: 'partnerships',
     description:
-      'Update onboarding notes for districts using ReadWorks as part of broader literacy support and curriculum planning.',
+      'Update onboarding notes for districts using ReadWorks as a supplemental literacy support with free or low-cost PD options.',
     location: 'Partner enablement board',
   },
   {
@@ -246,6 +246,105 @@ export const mockEvents: CalendarEvent[] = [
     description:
       'Official March 24, 2026 webinar slot used in this portal as the anchor for moderator, communications, and classroom-resource prep.',
     location: 'ReadWorks webinars',
+  },
+  {
+    id: '20',
+    title: 'Action Research Guide intake sync',
+    start: at(5, 9),
+    end: at(5, 10),
+    color: 'orange',
+    calendarId: 'curriculum-lab',
+    description:
+      'Prepare support materials for teachers using the six-week K-2 action research guide built around Article-A-Day plus decodables.',
+    location: 'Research operations',
+  },
+  {
+    id: '21',
+    title: 'Fall 2025 survey insight review',
+    start: at(5, 11),
+    end: at(5, 12),
+    color: 'purple',
+    calendarId: 'partnerships',
+    description:
+      'Review the 2026 survey recap: nearly 7,000 participants, 95% satisfaction, and a strong need for time-saving onboarding and PD support.',
+    location: 'Strategy room',
+  },
+  {
+    id: '22',
+    title: 'ESSA evidence and impact page QA',
+    start: at(5, 14),
+    end: at(5, 15),
+    color: 'purple',
+    calendarId: 'partnerships',
+    description:
+      'Verify language around ReadWorks meeting Tier-3 promising evidence under ESSA and keep the impact page aligned across surfaces.',
+    location: 'Impact communications',
+  },
+  {
+    id: '23',
+    title: 'Decodables and UFLI support review',
+    start: at(6, 9),
+    end: at(6, 10),
+    color: 'orange',
+    calendarId: 'curriculum-lab',
+    description:
+      'Check K-2 decodables support language, Mississippi alignment notes, and optional UFLI and Fundations references.',
+    location: 'Early literacy pod',
+  },
+  {
+    id: '24',
+    title: 'Book Studies title expansion review',
+    start: at(6, 11),
+    end: at(6, 12),
+    color: 'blue',
+    calendarId: 'article-a-day',
+    description:
+      'Review sample novel-support coverage around Wonder, The Wild Robot, Esperanza Rising, and The One and Only Ivan.',
+    location: 'Novel studies board',
+  },
+  {
+    id: '25',
+    title: 'Interventionists webinar recap',
+    start: at(6, 15),
+    end: at(6, 16),
+    color: 'green',
+    calendarId: 'teacher-support',
+    description:
+      'Turn SPED and interventionist webinar notes into quick-start guidance for teacher-support responses.',
+    location: 'Support programs channel',
+  },
+  {
+    id: '26',
+    title: 'Clever and ClassLink integration note check',
+    start: at(12, 10),
+    end: at(12, 11),
+    color: 'purple',
+    calendarId: 'partnerships',
+    description:
+      'Refresh platform onboarding notes covering ClassLink, Clever, and Google Classroom integration references.',
+    location: 'Platform partnerships',
+  },
+  {
+    id: '27',
+    title: 'Question set auto-grading review',
+    start: at(12, 13),
+    end: at(12, 14),
+    color: 'orange',
+    calendarId: 'curriculum-lab',
+    description:
+      'Review assessment-data messaging and auto-grading references used in district-facing product summaries.',
+    location: 'Assessment operations',
+  },
+  {
+    id: '28',
+    title: 'Article-A-Day fidelity check',
+    start: at(13, 9),
+    end: at(13, 10),
+    color: 'blue',
+    calendarId: 'article-a-day',
+    description:
+      'Check monthly scope-and-sequence reminders, four-plus articles per week guidance, and 15-week routine support.',
+    location: 'Routine implementation desk',
   },
 ];
 

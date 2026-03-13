@@ -133,7 +133,7 @@ export function Sidebar({
           </div>
 
           <p className="mt-4 text-sm leading-6 text-zinc-300">
-            ReadWorks content planning, teacher support, and partnership operations in one Infogito workspace.
+            ReadWorks content planning, teacher support, partnerships, and evidence-backed program operations in one Infogito workspace.
           </p>
 
           <div className="mt-5 flex rounded-2xl border border-white/10 bg-white/5 p-1">

@@ -1,0 +1,29 @@
+<svg width="1600" height="900" viewBox="0 0 1600 900" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1600" height="900" fill="#07121A"/>
+  <rect x="72" y="72" width="1456" height="756" rx="36" fill="url(#bg)" stroke="rgba(255,255,255,0.12)"/>
+  <text x="118" y="188" fill="#A4E7F6" font-family="Arial, Helvetica, sans-serif" font-size="26" letter-spacing="8">SURVEY INSIGHTS</text>
+  <text x="118" y="286" fill="white" font-family="Georgia, 'Times New Roman', serif" font-size="84">What educators asked for</text>
+  <text x="118" y="352" fill="#D7EEF5" font-family="Arial, Helvetica, sans-serif" font-size="30">Official January 2026 recap of the Fall 2025 ReadWorks survey</text>
+
+  <rect x="118" y="432" width="420" height="244" rx="30" fill="#0B2D39" stroke="#1A5D74"/>
+  <text x="154" y="500" fill="#A4E7F6" font-family="Arial, Helvetica, sans-serif" font-size="24">Participants</text>
+  <text x="154" y="580" fill="white" font-family="Georgia, 'Times New Roman', serif" font-size="78">6,956</text>
+
+  <rect x="570" y="432" width="420" height="244" rx="30" fill="#103224" stroke="#2C7950"/>
+  <text x="606" y="500" fill="#B8ECCB" font-family="Arial, Helvetica, sans-serif" font-size="24">Satisfaction</text>
+  <text x="606" y="580" fill="white" font-family="Georgia, 'Times New Roman', serif" font-size="78">95%</text>
+
+  <rect x="1022" y="432" width="402" height="244" rx="30" fill="#4F2810" stroke="#B4692C"/>
+  <text x="1058" y="500" fill="#FFD3A6" font-family="Arial, Helvetica, sans-serif" font-size="24">Top need</text>
+  <text x="1058" y="580" fill="white" font-family="Georgia, 'Times New Roman', serif" font-size="64">Time-saving support</text>
+
+  <text x="118" y="760" fill="#D7EEF5" font-family="Arial, Helvetica, sans-serif" font-size="30">Faster onboarding, easier discovery, and clearer implementation support shape this portal's deeper fill-out.</text>
+
+  <defs>
+    <linearGradient id="bg" x1="72" y1="72" x2="1528" y2="828" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#123142"/>
+      <stop offset="0.58" stop-color="#173523"/>
+      <stop offset="1" stop-color="#5D2E12"/>
+    </linearGradient>
+  </defs>
+</svg>

@@ -414,6 +414,11 @@ export function MainContent({
         caption: 'Guides, webinars, and follow-up work',
       },
       {
+        label: 'Partner work',
+        value: events.filter((event) => event.calendarId === 'partnerships').length,
+        caption: 'District and statewide coordination',
+      },
+      {
         label: 'Live sessions',
         value: events.filter((event) => event.icon === 'video').length,
         caption: 'Remote reviews still in play',
@@ -432,7 +437,7 @@ export function MainContent({
                 ReadWorks operating board
               </span>
               <span className="text-xs text-zinc-500 dark:text-zinc-400">
-                Working window for ReadWorks programs, webinars, and partner work.
+                Working window for ReadWorks programs, webinars, partner work, and research-aligned delivery.
               </span>
             </div>
 
@@ -448,7 +453,7 @@ export function MainContent({
               </p>
             </div>
 
-            <div className="grid gap-2 sm:grid-cols-3">
+            <div className="grid gap-2 sm:grid-cols-4">
               {summaryCards.map((card) => (
                 <div
                   key={card.label}
