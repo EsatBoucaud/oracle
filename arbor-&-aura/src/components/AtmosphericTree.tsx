@@ -82,13 +82,17 @@ export const AtmosphericTree: React.FC<AtmosphericTreeProps> = ({
 
     // Styling based on depth and type
     const isRoot = depth === 0;
-    const fontSizeClass = isRoot ? 'text-4xl md:text-5xl' : depth === 1 ? 'text-2xl md:text-3xl' : 'text-lg md:text-xl';
+    const fontSizeClass = isRoot ? 'text-[1.85rem] md:text-[2.6rem]' : depth === 1 ? 'text-xl md:text-2xl' : 'text-base md:text-lg';
     const opacityClass = isActive ? 'opacity-100' : isInActivePath ? 'opacity-80' : 'opacity-40 hover:opacity-70';
     
     return (
-      <div key={node.id} className="relative group/node">
+      <div key={node.id} className={`relative group/node ${isRoot ? 'mb-4' : ''}`}>
         <div 
-          className={`group flex items-center gap-4 py-3 transition-all duration-500 ease-out ${opacityClass}`}
+          className={`group flex items-center gap-3 transition-all duration-500 ease-out ${opacityClass} ${
+            isRoot
+              ? 'rounded-[28px] border border-white/10 bg-white/[0.03] px-4 py-4'
+              : 'py-2.5'
+          }`}
           style={{ paddingLeft: `${depth * 2}rem` }}
           onMouseEnter={() => onHover(node.id)}
           onMouseLeave={() => onHover(null)}
@@ -110,7 +114,7 @@ export const AtmosphericTree: React.FC<AtmosphericTreeProps> = ({
 
           {/* Node Content */}
           <div className="flex items-center gap-4 relative z-10 w-full">
-            <div className={`shrink-0 flex items-center justify-center ${isRoot ? 'w-6 h-6' : 'w-5 h-5'} rounded-md ${isActive ? 'bg-white/20 text-white' : 'bg-white/5 text-white/50 group-hover:bg-white/10 group-hover:text-white/80'} transition-all duration-300`}>
+            <div className={`shrink-0 flex items-center justify-center ${isRoot ? 'h-8 w-8' : 'h-5 w-5'} rounded-md ${isActive ? 'bg-white/20 text-white' : 'bg-white/5 text-white/50 group-hover:bg-white/10 group-hover:text-white/80'} transition-all duration-300`}>
               {getNodeIcon(node.type)}
             </div>
             
@@ -123,6 +127,14 @@ export const AtmosphericTree: React.FC<AtmosphericTreeProps> = ({
             >
               {node.title}
             </h2>
+
+            {hasChildren && (
+              <span className={`rounded-full border border-white/10 bg-white/5 px-2 py-1 text-[10px] font-mono uppercase tracking-[0.2em] text-white/35 ${
+                isRoot ? 'hidden md:inline-flex' : 'inline-flex'
+              }`}>
+                {children.length}
+              </span>
+            )}
 
             {isMatch && searchQuery && (
               <span className="ml-2 px-2 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 text-[10px] font-mono uppercase tracking-widest">Match</span>
@@ -172,12 +184,15 @@ export const AtmosphericTree: React.FC<AtmosphericTreeProps> = ({
   };
 
   return (
-    <div className="py-8 pb-48">
-      <div className="flex items-center justify-between mb-12">
-        <h1 className="font-mono text-[10px] tracking-[0.3em] uppercase opacity-50">Index</h1>
+    <div className="py-6 pb-48">
+      <div className="sticky top-0 z-20 mb-8 flex items-center justify-between border-b border-white/10 bg-black/60 py-4 backdrop-blur-xl">
+        <div>
+          <h1 className="font-mono text-[10px] tracking-[0.3em] uppercase opacity-50">Index</h1>
+          <p className="mt-2 text-xs text-white/35">ReadWorks branches, programs, and operating surfaces</p>
+        </div>
         <button 
           onClick={() => onAddNode(null)}
-          className="font-mono text-[10px] tracking-widest uppercase opacity-50 hover:opacity-100 flex items-center gap-1.5 transition-opacity"
+          className="font-mono text-[10px] tracking-widest uppercase opacity-50 hover:opacity-100 flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-3 py-2 transition-opacity"
         >
           <Plus className="w-3 h-3" /> Root
         </button>

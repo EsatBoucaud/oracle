@@ -346,6 +346,149 @@ export const mockEvents: CalendarEvent[] = [
       'Check monthly scope-and-sequence reminders, four-plus articles per week guidance, and 15-week routine support.',
     location: 'Routine implementation desk',
   },
+  {
+    id: '29',
+    title: 'Student Library implementation review',
+    start: at(3, 13),
+    end: at(3, 14),
+    color: 'blue',
+    calendarId: 'article-a-day',
+    description:
+      'Review student-library guidance: students can browse 1000s of nonfiction and fiction passages, read from kindergarten to two grades above grade level, and receive daily recommendations based on interest and reading history.',
+    location: 'Student reading experience desk',
+  },
+  {
+    id: '30',
+    title: 'Offline mode support audit',
+    start: at(7, 11),
+    end: at(7, 12),
+    color: 'green',
+    calendarId: 'teacher-support',
+    description:
+      'Check family- and teacher-facing instructions for offline mode, including download steps, delayed submission timestamps, and the features that are unavailable offline: audio, eBooks, paired video, and the Student Library.',
+    location: 'Access support channel',
+  },
+  {
+    id: '31',
+    title: 'Google Classroom add-on readiness check',
+    start: at(9, 14),
+    end: at(9, 15),
+    color: 'purple',
+    calendarId: 'partnerships',
+    description:
+      'Use official ReadWorks setup guidance to verify the Google Classroom add-on path, Sign in with Google, and roster-sync support before partner onboarding briefs go out.',
+    location: 'Platform adoption review',
+  },
+  {
+    id: '32',
+    title: 'February 2026 update digest',
+    start: at(10, 9),
+    end: at(10, 10),
+    color: 'purple',
+    calendarId: 'partnerships',
+    description:
+      'Package the February 24, 2026 public update covering Daniel Weisberg joining the board, fall 2025 survey results, and the latest Article-A-Day research brief.',
+    location: 'Executive updates board',
+  },
+  {
+    id: '33',
+    title: 'Curriculum alignments repack',
+    start: at(11, 15),
+    end: at(11, 16),
+    color: 'orange',
+    calendarId: 'curriculum-lab',
+    description:
+      'Refresh the district-facing alignments stack around Amplify CKLA, EL Education, Fishtank Learning, Louisiana Guidebooks, Wit & Wisdom, NGSS, vocabulary, decoding, and book-based pathways.',
+    location: 'Alignment operations',
+  },
+  {
+    id: '34',
+    title: 'Student Library rollout review',
+    start: at(11, 9),
+    end: at(11, 10),
+    color: 'blue',
+    calendarId: 'article-a-day',
+    description:
+      'Audit the student-library launch notes around daily recommendations, independent reading pathways, and teacher visibility into student reading volume.',
+    location: 'Student reading systems',
+  },
+  {
+    id: '35',
+    title: 'Big Book of Knowledge support sync',
+    start: at(11, 13),
+    end: at(11, 14),
+    color: 'green',
+    calendarId: 'teacher-support',
+    description:
+      'Bring together help-center notes for the Class Book of Knowledge, the student Big Book of Knowledge, and family-facing access instructions.',
+    location: 'Knowledge notebook support',
+  },
+  {
+    id: '36',
+    title: 'Shared-device Google setup QA',
+    start: at(12, 15),
+    end: at(12, 16),
+    color: 'purple',
+    calendarId: 'partnerships',
+    description:
+      'Validate the setup flow for schools using shared Chromebooks so the right Google account is selected before Classroom sync or ReadWorks launch.',
+    location: 'Platform onboarding desk',
+  },
+  {
+    id: '37',
+    title: 'Research evidence language review',
+    start: at(13, 11),
+    end: at(13, 12),
+    color: 'orange',
+    calendarId: 'curriculum-lab',
+    description:
+      'Cross-check current portal claims against the official research page, the Article-A-Day differentiation one-pager, and ESSA evidence references.',
+    location: 'Research and evidence lab',
+  },
+  {
+    id: '38',
+    title: 'Earth Day contest campaign check',
+    start: at(14, 14),
+    end: at(14, 15),
+    color: 'purple',
+    calendarId: 'partnerships',
+    description:
+      'Review the April 11, 2026 Earth Day illustration contest timeline and package teacher-facing promotion notes with the official submission sheet.',
+    location: 'Campaign planning wall',
+  },
+  {
+    id: '39',
+    title: 'Summer and afterschool quick-start planning',
+    start: at(15, 10),
+    end: at(15, 11),
+    color: 'green',
+    calendarId: 'teacher-support',
+    description:
+      'Build a short support packet using ReadWorks summer, YMCA afterschool, and hybrid Article-A-Day implementation materials for community-facing outreach.',
+    location: 'Family and community support',
+  },
+  {
+    id: '40',
+    title: 'Platform trust review',
+    start: at(13, 14),
+    end: at(13, 15),
+    color: 'purple',
+    calendarId: 'partnerships',
+    description:
+      'Refresh district-facing onboarding language using the official SOC 2 certification page, edtech approval materials, and Google Classroom readiness guidance.',
+    location: 'Security and platform trust',
+  },
+  {
+    id: '41',
+    title: 'Partner network narrative cleanup',
+    start: at(14, 10),
+    end: at(14, 11),
+    color: 'purple',
+    calendarId: 'partnerships',
+    description:
+      'Use the official ReadWorks partners page to tighten partner-network references across campaign copy, donor notes, and district outreach materials.',
+    location: 'Partnership strategy room',
+  },
 ];
 
 export const getInitialFocusDate = (events: CalendarEvent[]) => {

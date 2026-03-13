@@ -1,10 +1,14 @@
 import React, { useState } from 'react';
 import { ArborNode, NodeType } from '../types';
 import { motion, AnimatePresence } from 'motion/react';
-import { ArrowUpRight, CheckCircle2, Circle, Play, Link as LinkIcon, FileText, FolderGit2, Edit2, Plus, Image as ImageIcon, Video, CheckSquare, Maximize2, Headphones, File as FileIcon, Upload, Calendar, Clock, LayoutGrid, Columns, Square, Table, BarChart2, Activity, Database, CheckCircle, Zap, TrendingUp, Users } from 'lucide-react';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell, LineChart, Line, AreaChart, Area, Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ComposedChart } from 'recharts';
+import { ArrowUpRight, CheckCircle2, Circle, Play, Link as LinkIcon, FileText, FolderGit2, Edit2, Plus, Image as ImageIcon, Video, CheckSquare, Maximize2, Headphones, File as FileIcon, Upload, Calendar, Clock, LayoutGrid, Columns, Square, Table } from 'lucide-react';
 import { ImmersiveViewer } from './ImmersiveViewer';
 import { NodeEditor } from './NodeEditor';
+import { AIHome } from './AIHome';
+import { DashboardScreen } from '../../../src/components/DashboardScreen';
+import { MainContent } from '../../../src/components/MainContent';
+import type { CalendarEvent } from '../../../src/data/mockData';
+import type { ViewMode } from '../../../src/types/app';
 
 interface ConceptBoardProps {
   nodes: ArborNode[];
@@ -14,9 +18,35 @@ interface ConceptBoardProps {
   onEditNode: (id: string) => void;
   onAddNode: (parentId: string, type: NodeType, data?: Partial<ArborNode>) => void;
   onDeleteNode: (id: string) => void;
+  currentDate: Date;
+  onDateChange: (date: Date) => void;
+  events: CalendarEvent[];
+  onEventClick: (event: CalendarEvent) => void;
+  onGridClick: (date: Date, time: string) => void;
+  calendarView: ViewMode;
+  onCalendarViewChange: (view: ViewMode) => void;
+  calendarSearchQuery: string;
+  onCalendarSearchChange: (query: string) => void;
 }
 
-export const ConceptBoard: React.FC<ConceptBoardProps> = ({ nodes, activeId, onSelect, onUpdateNode, onEditNode, onAddNode, onDeleteNode }) => {
+export const ConceptBoard: React.FC<ConceptBoardProps> = ({
+  nodes,
+  activeId,
+  onSelect,
+  onUpdateNode,
+  onEditNode,
+  onAddNode,
+  onDeleteNode,
+  currentDate,
+  onDateChange,
+  events,
+  onEventClick,
+  onGridClick,
+  calendarView,
+  onCalendarViewChange,
+  calendarSearchQuery,
+  onCalendarSearchChange,
+}) => {
   const [filter, setFilter] = useState<NodeType | 'all'>('all');
   const [showAddMenu, setShowAddMenu] = useState(false);
   const [focusedResource, setFocusedResource] = useState<ArborNode | null>(null);
@@ -112,6 +142,144 @@ export const ConceptBoard: React.FC<ConceptBoardProps> = ({ nodes, activeId, onS
   const isGallery = activeNode.tags?.includes('gallery');
   const isTable = activeNode.tags?.includes('table');
   const isDashboard = activeNode.tags?.includes('dashboard');
+  const isAIHome = activeNode.tags?.includes('ai-home');
+  const isWorkspace = isCalendar || isDashboard;
+  const branchProfile = React.useMemo(() => {
+    const tags = activeNode.tags ?? [];
+
+    if (tags.includes('student-experience')) {
+      return {
+        kicker: 'Student Experience',
+        headline: 'Independent reading, access, and knowledge capture',
+        summary:
+          'This branch is where ReadWorks student-facing materials get translated into operating guidance for library rollout, offline use, and knowledge-building support.',
+        accent: 'from-sky-500/18 via-teal-500/10 to-transparent',
+        points: [
+          'Student Library expands beyond assignments into self-directed reading with daily recommendations.',
+          'Offline mode and digital supports create a cleaner equity and device-access story.',
+          'Big Book of Knowledge flows connect reading routines to visible knowledge accumulation.',
+        ],
+      };
+    }
+
+    if (tags.includes('professional-learning')) {
+      return {
+        kicker: 'Professional Learning',
+        headline: 'District enablement and implementation support',
+        summary:
+          'Use this branch for public-facing PD packages, regional support examples, and admin-facing inquiry pathways that anchor implementation conversations.',
+        accent: 'from-emerald-500/18 via-emerald-400/10 to-transparent',
+        points: [
+          'Professional learning packages give districts a concrete services frame.',
+          'Philadelphia support pages add a real localized example instead of generic PD copy.',
+          'Admin inquiry and routing notes help translate public materials into quick response workflows.',
+        ],
+      };
+    }
+
+    if (tags.includes('platform')) {
+      return {
+        kicker: 'Platform and Access',
+        headline: 'Setup trust, syncing, and classroom readiness',
+        summary:
+          'This branch centralizes the real operational surface for Google Classroom, shared devices, filters, onboarding guides, and platform trust signals.',
+        accent: 'from-cyan-500/16 via-sky-500/10 to-transparent',
+        points: [
+          'Google Classroom sync, add-on readiness, and shared-device notes now live together.',
+          'Support-center filters and quick-start guides ground teacher setup workflows.',
+          'Security and approval artifacts make partner onboarding more credible.',
+        ],
+      };
+    }
+
+    if (tags.includes('campaigns') || tags.includes('adoption')) {
+      return {
+        kicker: 'Adoption and Campaigns',
+        headline: 'Onboarding motion, outreach, and public narratives',
+        summary:
+          'This area collects the external-facing assets that make ReadWorks adoption feel real: campaigns, supporter material, Google ecosystem stories, and seasonal pushes.',
+        accent: 'from-lime-500/14 via-emerald-500/10 to-transparent',
+        points: [
+          'Monthly updates and Google partnership material sharpen the adoption storyline.',
+          'Earth Day and student campaigns add real audience-facing moments to the portal.',
+          'Supporter and corporate materials give outreach work a stronger factual base.',
+        ],
+      };
+    }
+
+    if (tags.includes('research') || tags.includes('evidence')) {
+      return {
+        kicker: 'Research and Evidence',
+        headline: 'Evidence claims before they enter live operations',
+        summary:
+          'This branch is the quality gate for efficacy language, differentiation claims, and ESSA framing before those points appear in dashboard or partner messaging.',
+        accent: 'from-indigo-500/18 via-blue-500/10 to-transparent',
+        points: [
+          'Article-A-Day evidence should be checked against the research page, not memory.',
+          'Differentiation briefs help connect pedagogy claims to real program mechanics.',
+          'This is the right branch for disciplined message QA before external use.',
+        ],
+      };
+    }
+
+    if (tags.includes('families') || tags.includes('afterschool') || tags.includes('summer')) {
+      return {
+        kicker: 'Family and Community',
+        headline: 'Year-round learning pathways beyond the classroom',
+        summary:
+          'These nodes translate ReadWorks into summer, afterschool, family, and remote-learning contexts so the portal reflects a fuller support ecosystem.',
+        accent: 'from-amber-500/18 via-orange-500/10 to-transparent',
+        points: [
+          'Summer and afterschool pages make the product story more durable across the year.',
+          'Hybrid and remote routine guidance broadens the implementation surface.',
+          'Family-facing Book of Knowledge support gives community outreach a practical anchor.',
+        ],
+      };
+    }
+
+    if (tags.includes('licensing') || tags.includes('financials')) {
+      return {
+        kicker: 'Sustainability',
+        headline: 'Efficiency, licensing, and financial trust',
+        summary:
+          'This branch is the operating source for transparency, licensing, and sustainability messaging that partner and donor-facing work depends on.',
+        accent: 'from-blue-500/16 via-slate-500/10 to-transparent',
+        points: [
+          'Annual reports, financials, and audits ground cost-efficiency claims.',
+          'Licensing pages keep content-usage language precise.',
+          'This is the safest place to source partner sustainability talking points.',
+        ],
+      };
+    }
+
+    return null;
+  }, [activeNode.tags]);
+
+  const spotlightResources = React.useMemo(
+    () =>
+      allResources
+        .filter((node) => ['link', 'document', 'text', 'task'].includes(node.type))
+        .slice(0, 4),
+    [allResources],
+  );
+
+  const branchStats = React.useMemo(
+    () => [
+      {
+        label: 'Artifacts',
+        value: String(allResources.length).padStart(2, '0'),
+      },
+      {
+        label: 'References',
+        value: String(allResources.filter((node) => node.type === 'link' || node.type === 'document').length).padStart(2, '0'),
+      },
+      {
+        label: 'Open tasks',
+        value: String(allResources.filter((node) => node.type === 'task' && !node.completed).length).padStart(2, '0'),
+      },
+    ],
+    [allResources],
+  );
 
   const filters: { label: string; value: NodeType | 'all' }[] = [
     { label: 'All', value: 'all' },
@@ -136,118 +304,6 @@ export const ConceptBoard: React.FC<ConceptBoardProps> = ({ nodes, activeId, onS
     { label: 'Audio', type: 'audio', icon: Headphones },
     { label: 'Document', type: 'document', icon: FileIcon },
   ];
-
-  const COLORS = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899', '#06b6d4'];
-  
-  const kpiData = React.useMemo(() => {
-    if (!isDashboard) return null;
-    const tasks = allResources.filter(n => n.type === 'task');
-    const completedTasks = tasks.filter(t => t.completed).length;
-    const completionRate = tasks.length ? Math.round((completedTasks / tasks.length) * 100) : 0;
-    
-    // Simulate storage based on content length and media presence
-    const storageBytes = allResources.reduce((acc, node) => {
-      let size = 1024; // base 1KB per node
-      if (node.content) size += node.content.length;
-      if (node.imageUrl || node.url) size += 500 * 1024; // simulate 500KB per media
-      return acc + size;
-    }, 0);
-    const storageMB = (storageBytes / (1024 * 1024)).toFixed(1);
-
-    return {
-      totalNodes: allResources.length,
-      activeTasks: tasks.length - completedTasks,
-      completionRate,
-      storageUsed: storageMB
-    };
-  }, [allResources, isDashboard]);
-
-  const radarData = React.useMemo(() => {
-    if (!isDashboard) return [];
-    
-    const categories = {
-      'Design': ['architecture', 'design', 'ui', 'typography', 'colors', 'texture', 'glass', 'brutalism', 'minimalism', 'abstract', 'moodboard'],
-      'Research': ['research', 'science', 'data', 'interview', 'survey', 'usability', 'competitors'],
-      'Development': ['engineering', 'frontend', '3d', 'structure'],
-      'Planning': ['todo', 'kanban', 'project-management', 'status:todo', 'status:in-progress', 'status:done', 'calendar', 'events', 'planning', 'action-item'],
-      'Marketing': ['marketing', 'copywriting', 'pr', 'communications', 'social', 'networking'],
-      'Media': ['video', 'image', 'audio', 'document', 'reference', 'inspiration']
-    };
-
-    const counts: Record<string, number> = {
-      'Design': 0, 'Research': 0, 'Development': 0, 'Planning': 0, 'Marketing': 0, 'Media': 0, 'Other': 0
-    };
-    
-    allResources.forEach(node => {
-      if (!node.tags || node.tags.length === 0) {
-        counts['Other']++;
-      } else {
-        node.tags.forEach(tag => {
-          const lowerTag = tag.toLowerCase();
-          let matched = false;
-          for (const [category, keywords] of Object.entries(categories)) {
-            if (keywords.includes(lowerTag)) {
-              counts[category]++;
-              matched = true;
-              break;
-            }
-          }
-          if (!matched) counts['Other']++;
-        });
-      }
-    });
-
-    return [
-      { subject: 'Design', A: counts['Design'], fullMark: 100 },
-      { subject: 'Research', A: counts['Research'], fullMark: 100 },
-      { subject: 'Development', A: counts['Development'], fullMark: 100 },
-      { subject: 'Planning', A: counts['Planning'], fullMark: 100 },
-      { subject: 'Marketing', A: counts['Marketing'], fullMark: 100 },
-      { subject: 'Media', A: counts['Media'], fullMark: 100 },
-    ];
-  }, [allResources, isDashboard]);
-
-  const activityData = React.useMemo(() => {
-    if (!isDashboard) return [];
-    const data = [];
-    
-    const conceptsByDate: Record<string, number> = {};
-    const resourcesByDate: Record<string, number> = {};
-    
-    allResources.forEach(node => {
-      if (node.updatedAt) {
-        const isoDate = node.updatedAt.split('T')[0];
-        if (node.type === 'concept') {
-          conceptsByDate[isoDate] = (conceptsByDate[isoDate] || 0) + 1;
-        } else {
-          resourcesByDate[isoDate] = (resourcesByDate[isoDate] || 0) + 1;
-        }
-      }
-    });
-
-    for (let i = 14; i >= 0; i--) {
-      const d = new Date();
-      d.setDate(d.getDate() - i);
-      const isoDate = d.toISOString().split('T')[0];
-      const dateStr = d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-      
-      data.push({
-        date: dateStr,
-        concepts: conceptsByDate[isoDate] || 0,
-        resources: resourcesByDate[isoDate] || 0,
-      });
-    }
-    return data;
-  }, [allResources, isDashboard]);
-
-  const nodeTypeData = React.useMemo(() => {
-    if (!isDashboard) return [];
-    const counts: Record<string, number> = {};
-    allResources.forEach(node => {
-      counts[node.type] = (counts[node.type] || 0) + 1;
-    });
-    return Object.entries(counts).map(([name, value]) => ({ name, value }));
-  }, [allResources, isDashboard]);
 
   const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault();
@@ -351,7 +407,9 @@ export const ConceptBoard: React.FC<ConceptBoardProps> = ({ nodes, activeId, onS
   return (
     <>
       <div 
-        className="w-full h-full overflow-y-auto custom-scrollbar px-8 md:px-16 py-12 pb-32 relative"
+        className={`w-full h-full overflow-y-auto custom-scrollbar relative ${
+          isWorkspace ? 'px-0 py-2 pb-10' : 'px-8 py-12 pb-32 md:px-16'
+        }`}
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
@@ -365,62 +423,169 @@ export const ConceptBoard: React.FC<ConceptBoardProps> = ({ nodes, activeId, onS
             </div>
           </div>
         )}
-        <div className="max-w-5xl mx-auto">
-          
+        <div className={`${isWorkspace ? 'max-w-none' : isAIHome ? 'max-w-6xl' : 'max-w-5xl'} mx-auto`}>
+          {isAIHome ? (
+            <AIHome
+              nodes={nodes}
+              onSelectRoot={onSelect}
+              onCreateRoot={(data) => onAddNode(null, 'concept', data)}
+            />
+          ) : (
+            <>
           {/* Breadcrumbs */}
-          <nav className="flex items-center gap-2 text-sm font-mono tracking-widest uppercase opacity-50 mb-8 flex-wrap">
-            {breadcrumbs.map((crumb, idx) => (
-              <React.Fragment key={crumb.id}>
-                {idx > 0 && <span>/</span>}
-                <button 
-                  onClick={() => onSelect(crumb.id)}
-                  className="hover:text-white transition-colors"
-                >
-                  {crumb.title}
-                </button>
-              </React.Fragment>
-            ))}
-          </nav>
+          {!isWorkspace && (
+            <nav className="mb-8 flex flex-wrap items-center gap-2 text-sm font-mono uppercase tracking-widest opacity-50">
+              {breadcrumbs.map((crumb, idx) => (
+                <React.Fragment key={crumb.id}>
+                  {idx > 0 && <span>/</span>}
+                  <button 
+                    onClick={() => onSelect(crumb.id)}
+                    className="hover:text-white transition-colors"
+                  >
+                    {crumb.title}
+                  </button>
+                </React.Fragment>
+              ))}
+            </nav>
+          )}
 
           {/* Hero Section */}
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            key={`hero-${activeId}`}
-            className="mb-12 relative group"
-          >
-            <div className="flex items-start justify-between gap-8">
-              <div>
-                <h1 className="text-5xl md:text-7xl font-serif tracking-tight mb-6 leading-none">
-                  {activeNode.title}
-                </h1>
-                {activeNode.content && (
-                  <p className="text-xl md:text-2xl text-white/70 max-w-3xl leading-relaxed font-sans font-light">
-                    {activeNode.content}
-                  </p>
-                )}
-                {activeNode.tags && activeNode.tags.length > 0 && (
-                  <div className="flex gap-2 mt-6">
-                    {activeNode.tags.map(tag => (
-                      <span key={tag} className="px-3 py-1 rounded-full bg-white/5 border border-white/10 text-white/50 text-xs font-mono uppercase tracking-widest">
-                        {tag}
-                      </span>
+          {!isWorkspace && (
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              key={`hero-${activeId}`}
+              className="relative mb-12 group"
+            >
+              <div className="flex items-start justify-between gap-8">
+                <div>
+                  <h1 className="mb-6 font-serif text-5xl leading-none tracking-tight md:text-7xl">
+                    {activeNode.title}
+                  </h1>
+                  {activeNode.content && (
+                    <p className="max-w-3xl text-xl font-light leading-relaxed text-white/70 font-sans md:text-2xl">
+                      {activeNode.content}
+                    </p>
+                  )}
+                  {activeNode.tags && activeNode.tags.length > 0 && (
+                    <div className="mt-4 flex flex-wrap gap-2">
+                      {activeNode.tags.map(tag => (
+                        <span
+                          key={tag}
+                          className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-mono uppercase tracking-widest text-white/50"
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                </div>
+                <button 
+                  onClick={() => setEditingNodeId(activeNode.id)}
+                  className="opacity-0 group-hover:opacity-100 p-3 rounded-full bg-white/10 hover:bg-white/20 transition-all text-white/70 hover:text-white shrink-0"
+                  title="Edit Concept"
+                >
+                  <Edit2 className="w-5 h-5" />
+                </button>
+              </div>
+            </motion.div>
+          )}
+
+          {branchProfile && !isWorkspace && (
+            <motion.div
+              initial={{ opacity: 0, y: 18 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.05 }}
+              className="mb-10 grid gap-4 xl:grid-cols-[minmax(0,1.12fr)_minmax(320px,0.88fr)]"
+            >
+              <div className={`overflow-hidden rounded-[32px] border border-white/10 bg-gradient-to-br ${branchProfile.accent} bg-black/30 p-6`}>
+                <div className="text-[11px] font-mono uppercase tracking-[0.3em] text-white/40">
+                  {branchProfile.kicker}
+                </div>
+                <h2 className="mt-3 max-w-3xl font-serif text-3xl tracking-tight text-white md:text-4xl">
+                  {branchProfile.headline}
+                </h2>
+                <p className="mt-3 max-w-3xl text-sm leading-7 text-white/70 md:text-base">
+                  {branchProfile.summary}
+                </p>
+
+                <div className="mt-6 grid gap-3 sm:grid-cols-3">
+                  {branchStats.map((stat) => (
+                    <div key={stat.label} className="rounded-2xl border border-white/10 bg-black/30 px-4 py-4">
+                      <div className="text-[10px] font-mono uppercase tracking-[0.28em] text-white/35">{stat.label}</div>
+                      <div className="mt-3 font-serif text-3xl text-white">{stat.value}</div>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="mt-6 grid gap-3 md:grid-cols-3">
+                  {branchProfile.points.map((point) => (
+                    <div key={point} className="rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-4 text-sm leading-6 text-white/68">
+                      {point}
+                    </div>
+                  ))}
+                </div>
+
+                {childConcepts.length > 0 && (
+                  <div className="mt-6 flex flex-wrap gap-2">
+                    {childConcepts.slice(0, 4).map((concept) => (
+                      <button
+                        key={concept.id}
+                        onClick={() => onSelect(concept.id)}
+                        className="rounded-full border border-white/10 bg-white/5 px-3 py-2 text-xs font-medium text-white/75 transition-colors hover:bg-white/10 hover:text-white"
+                      >
+                        {concept.title}
+                      </button>
                     ))}
                   </div>
                 )}
               </div>
-              <button 
-                onClick={() => setEditingNodeId(activeNode.id)}
-                className="opacity-0 group-hover:opacity-100 p-3 rounded-full bg-white/10 hover:bg-white/20 transition-all text-white/70 hover:text-white shrink-0"
-                title="Edit Concept"
-              >
-                <Edit2 className="w-5 h-5" />
-              </button>
-            </div>
-          </motion.div>
+
+              <div className="rounded-[32px] border border-white/10 bg-white/[0.03] p-5">
+                <div className="flex items-center justify-between gap-3">
+                  <div>
+                    <div className="text-[11px] font-mono uppercase tracking-[0.28em] text-white/40">Key Artifacts</div>
+                    <h3 className="mt-2 font-serif text-2xl text-white">Reference deck</h3>
+                  </div>
+                  <div className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[10px] font-mono uppercase tracking-[0.24em] text-white/40">
+                    ReadWorks
+                  </div>
+                </div>
+
+                <div className="mt-5 space-y-3">
+                  {spotlightResources.length > 0 ? (
+                    spotlightResources.map((resource) => (
+                      <button
+                        key={resource.id}
+                        onClick={() => setFocusedResource(resource)}
+                        className="w-full rounded-[24px] border border-white/10 bg-black/25 p-4 text-left transition-colors hover:bg-white/[0.06]"
+                      >
+                        <div className="flex items-start justify-between gap-4">
+                          <div>
+                            <div className="text-[10px] font-mono uppercase tracking-[0.24em] text-white/35">
+                              {resource.type}
+                            </div>
+                            <div className="mt-2 text-base font-medium text-white/92">{resource.title}</div>
+                            <div className="mt-2 line-clamp-2 text-sm leading-6 text-white/58">
+                              {resource.content || resource.url || 'Open this artifact'}
+                            </div>
+                          </div>
+                          <ArrowUpRight className="mt-1 h-4 w-4 shrink-0 text-white/35" />
+                        </div>
+                      </button>
+                    ))
+                  ) : (
+                    <div className="rounded-[24px] border border-dashed border-white/10 px-4 py-5 text-sm text-white/45">
+                      No linked artifacts yet for this branch.
+                    </div>
+                  )}
+                </div>
+              </div>
+            </motion.div>
+          )}
 
           {/* Filter Bar */}
-          {allResources.length > 0 && (
+          {allResources.length > 0 && !isCalendar && !isDashboard && (
             <div className="flex items-center gap-2 mb-12 overflow-x-auto pb-2 custom-scrollbar">
               {filters.map(f => {
                 const count = f.value === 'all' ? allResources.length : allResources.filter(r => r.type === f.value).length;
@@ -519,94 +684,23 @@ export const ConceptBoard: React.FC<ConceptBoardProps> = ({ nodes, activeId, onS
           )}
 
           {/* Calendar View */}
-          {isCalendar && filter === 'all' && (
-            <div className="mb-16">
-              <div className="bg-white/5 rounded-3xl border border-white/10 overflow-hidden">
-                {/* Calendar Header */}
-                <div className="p-6 border-b border-white/10 flex items-center justify-between">
-                  <h3 className="font-serif text-2xl text-white flex items-center gap-3">
-                    <Calendar className="w-6 h-6 text-white/50" />
-                    {new Date().toLocaleString('default', { month: 'long', year: 'numeric' })}
-                  </h3>
-                  <button
-                    onClick={() => onAddNode(activeId, 'event')}
-                    className="px-4 py-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors text-sm font-mono tracking-wider uppercase flex items-center gap-2"
-                  >
-                    <Plus className="w-4 h-4" /> Add Event
-                  </button>
-                </div>
-                
-                {/* Calendar Grid */}
-                <div className="grid grid-cols-7 border-b border-white/10 bg-black/40">
-                  {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(day => (
-                    <div key={day} className="p-3 text-center text-xs font-mono tracking-widest uppercase text-white/40 border-r border-white/10 last:border-r-0">
-                      {day}
-                    </div>
-                  ))}
-                </div>
-                
-                <div className="grid grid-cols-7 bg-black/20">
-                  {/* Generate calendar days */}
-                  {(() => {
-                    const today = new Date();
-                    const year = today.getFullYear();
-                    const month = today.getMonth();
-                    const firstDay = new Date(year, month, 1).getDay();
-                    const daysInMonth = new Date(year, month + 1, 0).getDate();
-                    
-                    const days = [];
-                    // Empty cells before 1st
-                    for (let i = 0; i < firstDay; i++) {
-                      days.push(<div key={`empty-${i}`} className="min-h-[120px] p-2 border-r border-b border-white/5 bg-black/40" />);
-                    }
-                    
-                    // Actual days
-                    for (let d = 1; d <= daysInMonth; d++) {
-                      const currentDate = new Date(year, month, d);
-                      // Adjust for local timezone to avoid off-by-one errors with ISO string
-                      const dateString = new Date(currentDate.getTime() - (currentDate.getTimezoneOffset() * 60000)).toISOString().split('T')[0];
-                      const isToday = d === today.getDate();
-                      
-                      // Find events for this day
-                      const dayEvents = nodes.filter(n => 
-                        n.parentId === activeId && 
-                        n.type === 'event' && 
-                        n.startDate === dateString
-                      );
-                      
-                      days.push(
-                        <div key={d} className={`min-h-[120px] p-2 border-r border-b border-white/5 transition-colors hover:bg-white/5 ${isToday ? 'bg-white/5' : ''}`}>
-                          <div className={`text-xs font-mono mb-2 w-6 h-6 flex items-center justify-center rounded-full ${isToday ? 'bg-white text-black' : 'text-white/40'}`}>
-                            {d}
-                          </div>
-                          <div className="flex flex-col gap-1">
-                            {dayEvents.map(event => (
-                              <div 
-                                key={event.id}
-                                onClick={(e) => { e.stopPropagation(); setFocusedResource(event); }}
-                                className="text-xs p-1.5 rounded bg-white/10 border border-white/10 text-white/80 truncate cursor-pointer hover:bg-white/20 transition-colors"
-                              >
-                                {event.title}
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-                      );
-                    }
-                    
-                    // Empty cells after end of month to complete grid
-                    const totalCells = days.length;
-                    const remainingCells = (7 - (totalCells % 7)) % 7;
-                    for (let i = 0; i < remainingCells; i++) {
-                      days.push(<div key={`empty-end-${i}`} className="min-h-[120px] p-2 border-r border-b border-white/5 bg-black/40" />);
-                    }
-                    
-                    return days;
-                  })()}
+            {isCalendar && filter === 'all' && (
+              <div className="mb-10">
+                <div className="flex h-[1040px] flex-col overflow-hidden rounded-[32px] border border-white/10 bg-black/20 shadow-[0_24px_80px_rgba(0,0,0,0.28)] xl:h-[1100px] 2xl:h-[1160px]">
+                  <MainContent
+                    currentDate={currentDate}
+                    onDateChange={onDateChange}
+                    events={events}
+                    onEventClick={onEventClick}
+                    onGridClick={onGridClick}
+                    view={calendarView}
+                    onViewChange={onCalendarViewChange}
+                    searchQuery={calendarSearchQuery}
+                    onSearchChange={onCalendarSearchChange}
+                  />
                 </div>
               </div>
-            </div>
-          )}
+            )}
 
           {/* Gallery View */}
           {isGallery && filter === 'all' && (
@@ -773,180 +867,16 @@ export const ConceptBoard: React.FC<ConceptBoardProps> = ({ nodes, activeId, onS
           )}
 
           {/* Dashboard View */}
-          {isDashboard && filter === 'all' && kpiData && (
-            <div className="mb-16 space-y-6">
-              <div className="flex items-center justify-between mb-8">
-                <h3 className="font-mono text-xs tracking-[0.2em] uppercase text-white/40 flex items-center gap-2">
-                  <Activity className="w-4 h-4" /> Workspace Analytics
-                </h3>
-              </div>
-              
-              {/* KPI Row */}
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                <div className="bg-white/5 border border-white/10 rounded-2xl p-6 flex flex-col justify-between">
-                  <div className="flex justify-between items-start mb-4">
-                    <p className="text-white/50 text-sm font-medium">Total Resources</p>
-                    <Database className="w-5 h-5 text-blue-400" />
-                  </div>
-                  <p className="text-4xl font-serif text-white">{kpiData.totalNodes}</p>
-                </div>
-                
-                <div className="bg-white/5 border border-white/10 rounded-2xl p-6 flex flex-col justify-between">
-                  <div className="flex justify-between items-start mb-4">
-                    <p className="text-white/50 text-sm font-medium">Active Tasks</p>
-                    <CheckCircle className="w-5 h-5 text-emerald-400" />
-                  </div>
-                  <p className="text-4xl font-serif text-white">{kpiData.activeTasks}</p>
-                </div>
-                
-                <div className="bg-white/5 border border-white/10 rounded-2xl p-6 flex flex-col justify-between">
-                  <div className="flex justify-between items-start mb-4">
-                    <p className="text-white/50 text-sm font-medium">Completion Rate</p>
-                    <TrendingUp className="w-5 h-5 text-amber-400" />
-                  </div>
-                  <p className="text-4xl font-serif text-white">{kpiData.completionRate}%</p>
-                </div>
-                
-                <div className="bg-white/5 border border-white/10 rounded-2xl p-6 flex flex-col justify-between">
-                  <div className="flex justify-between items-start mb-4">
-                    <p className="text-white/50 text-sm font-medium">Storage Used</p>
-                    <Zap className="w-5 h-5 text-purple-400" />
-                  </div>
-                  <p className="text-4xl font-serif text-white">{kpiData.storageUsed} <span className="text-lg text-white/50">MB</span></p>
+            {isDashboard && filter === 'all' && (
+              <div className="mb-10">
+                <div className="flex h-[1040px] flex-col overflow-hidden rounded-[32px] border border-white/10 bg-black/20 shadow-[0_24px_80px_rgba(0,0,0,0.28)] xl:h-[1090px] 2xl:h-[1140px]">
+                  <DashboardScreen
+                    currentDate={currentDate}
+                    events={events}
+                  />
                 </div>
               </div>
-
-              {/* Main Charts Grid */}
-              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                
-                {/* Activity Over Time (Composed Chart) */}
-                <div className="bg-white/5 border border-white/10 rounded-2xl p-6 lg:col-span-2">
-                  <h4 className="text-sm font-medium text-white/70 mb-6 flex items-center gap-2">
-                    <Activity className="w-4 h-4" /> Activity Timeline
-                  </h4>
-                  <div className="h-72">
-                    <ResponsiveContainer width="100%" height="100%">
-                      <ComposedChart data={activityData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-                        <defs>
-                          <linearGradient id="colorEdited" x1="0" y1="0" x2="0" y2="1">
-                            <stop offset="5%" stopColor="#8b5cf6" stopOpacity={0.3}/>
-                            <stop offset="95%" stopColor="#8b5cf6" stopOpacity={0}/>
-                          </linearGradient>
-                        </defs>
-                        <XAxis dataKey="date" stroke="rgba(255,255,255,0.2)" fontSize={12} tickMargin={10} />
-                        <YAxis stroke="rgba(255,255,255,0.2)" fontSize={12} />
-                        <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" vertical={false} />
-                        <Tooltip 
-                          contentStyle={{ backgroundColor: '#18181b', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px', boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.5)' }}
-                          itemStyle={{ color: '#fff' }}
-                        />
-                        <Legend wrapperStyle={{ paddingTop: '20px' }} />
-                        <Area type="monotone" dataKey="resources" name="Resource Updates" stroke="#8b5cf6" fillOpacity={1} fill="url(#colorEdited)" />
-                        <Bar dataKey="concepts" name="New Concepts" barSize={20} fill="#3b82f6" radius={[4, 4, 0, 0]} />
-                      </ComposedChart>
-                    </ResponsiveContainer>
-                  </div>
-                </div>
-
-                {/* Knowledge Distribution (Radar Chart) */}
-                <div className="bg-white/5 border border-white/10 rounded-2xl p-6">
-                  <h4 className="text-sm font-medium text-white/70 mb-6 flex items-center gap-2">
-                    <Users className="w-4 h-4" /> Knowledge Distribution
-                  </h4>
-                  <div className="h-72">
-                    <ResponsiveContainer width="100%" height="100%">
-                      <RadarChart cx="50%" cy="50%" outerRadius="70%" data={radarData}>
-                        <PolarGrid stroke="rgba(255,255,255,0.1)" />
-                        <PolarAngleAxis dataKey="subject" tick={{ fill: 'rgba(255,255,255,0.5)', fontSize: 11 }} />
-                        <PolarRadiusAxis angle={30} domain={[0, 'dataMax']} tick={false} axisLine={false} />
-                        <Radar name="Topics" dataKey="A" stroke="#10b981" fill="#10b981" fillOpacity={0.3} />
-                        <Tooltip 
-                          contentStyle={{ backgroundColor: '#18181b', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px' }}
-                        />
-                      </RadarChart>
-                    </ResponsiveContainer>
-                  </div>
-                </div>
-
-                {/* Resource Types (Donut Chart) */}
-                <div className="bg-white/5 border border-white/10 rounded-2xl p-6">
-                  <h4 className="text-sm font-medium text-white/70 mb-6 flex items-center gap-2">
-                    <PieChart className="w-4 h-4" /> Resource Types
-                  </h4>
-                  <div className="h-64">
-                    <ResponsiveContainer width="100%" height="100%">
-                      <PieChart>
-                        <Pie
-                          data={nodeTypeData}
-                          cx="50%"
-                          cy="50%"
-                          innerRadius={70}
-                          outerRadius={90}
-                          paddingAngle={5}
-                          dataKey="value"
-                          stroke="none"
-                        >
-                          {nodeTypeData.map((entry, index) => (
-                            <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                          ))}
-                        </Pie>
-                        <Tooltip 
-                          contentStyle={{ backgroundColor: '#18181b', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px' }}
-                          itemStyle={{ color: '#fff' }}
-                        />
-                        <Legend wrapperStyle={{ paddingTop: '20px' }} />
-                      </PieChart>
-                    </ResponsiveContainer>
-                  </div>
-                </div>
-
-                {/* Recent Activity Feed */}
-                <div className="bg-white/5 border border-white/10 rounded-2xl p-6 lg:col-span-2">
-                  <h4 className="text-sm font-medium text-white/70 mb-6 flex items-center gap-2">
-                    <Clock className="w-4 h-4" /> Recent Activity
-                  </h4>
-                  <div className="space-y-4">
-                    {[...allResources].sort((a, b) => new Date(b.updatedAt || 0).getTime() - new Date(a.updatedAt || 0).getTime()).slice(0, 5).map((node, i) => (
-                      <div key={node.id} className="flex items-center justify-between p-4 rounded-xl bg-white/5 border border-white/5 hover:bg-white/10 transition-colors cursor-pointer" onClick={() => setFocusedResource(node)}>
-                        <div className="flex items-center gap-4">
-                          <div className={`w-10 h-10 rounded-full flex items-center justify-center bg-white/10 text-white`}>
-                            {node.type === 'concept' && <FolderGit2 className="w-4 h-4" />}
-                            {node.type === 'image' && <ImageIcon className="w-4 h-4" />}
-                            {node.type === 'text' && <FileText className="w-4 h-4" />}
-                            {node.type === 'task' && <CheckSquare className="w-4 h-4" />}
-                            {node.type === 'link' && <LinkIcon className="w-4 h-4" />}
-                            {node.type === 'video' && <Video className="w-4 h-4" />}
-                            {node.type === 'audio' && <Headphones className="w-4 h-4" />}
-                            {node.type === 'document' && <FileIcon className="w-4 h-4" />}
-                            {node.type === 'event' && <Calendar className="w-4 h-4" />}
-                          </div>
-                          <div>
-                            <p className="text-sm font-medium text-white/90">{node.title}</p>
-                            <p className="text-xs text-white/40 mt-1">
-                              {node.type.charAt(0).toUpperCase() + node.type.slice(1)} • Added recently
-                            </p>
-                          </div>
-                        </div>
-                        <div className="flex gap-2">
-                          {node.tags?.slice(0, 2).map(tag => (
-                            <span key={tag} className="px-2 py-1 rounded bg-white/5 text-[10px] font-mono uppercase tracking-widest text-white/50 border border-white/10">
-                              {tag}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-                    ))}
-                    {allResources.length === 0 && (
-                      <div className="text-center py-8 text-white/40 text-sm">
-                        No recent activity found.
-                      </div>
-                    )}
-                  </div>
-                </div>
-
-              </div>
-            </div>
-          )}
+            )}
 
           {/* Correlated Concepts (Bento Row) */}
           {!isKanban && !isCalendar && !isGallery && !isTable && !isDashboard && childConcepts.length > 0 && filter === 'all' && (
@@ -1174,9 +1104,12 @@ export const ConceptBoard: React.FC<ConceptBoardProps> = ({ nodes, activeId, onS
               </div>
             </div>
           )}
+            </>
+          )}
         </div>
 
         {/* Floating Quick Add Menu */}
+        {!isAIHome && (
         <div className="fixed bottom-12 right-12 z-40 flex flex-col items-end gap-4">
           <AnimatePresence>
             {showAddMenu && (
@@ -1190,7 +1123,11 @@ export const ConceptBoard: React.FC<ConceptBoardProps> = ({ nodes, activeId, onS
                   <button
                     key={opt.type}
                     onClick={() => {
-                      onAddNode(activeId, opt.type);
+                      if (isCalendar && opt.type === 'event') {
+                        onGridClick(currentDate, '09:00');
+                      } else {
+                        onAddNode(activeId, opt.type);
+                      }
                       setShowAddMenu(false);
                     }}
                     className="flex items-center gap-3 px-4 py-2 rounded-xl hover:bg-white/10 transition-colors text-left"
@@ -1212,6 +1149,7 @@ export const ConceptBoard: React.FC<ConceptBoardProps> = ({ nodes, activeId, onS
             <Plus className="w-6 h-6" />
           </button>
         </div>
+        )}
       </div>
 
       <ImmersiveViewer 

@@ -1,16 +1,13 @@
-import React, { Suspense, useMemo, useState } from 'react';
-import { DashboardScreen } from './components/DashboardScreen';
-import { Sidebar } from './components/Sidebar';
-import { MainContent } from './components/MainContent';
+import React, { useState } from 'react';
 import { EventModal } from './components/EventModal';
 import { SettingsModal } from './components/SettingsModal';
-import { mockEvents, CalendarEvent, CALENDARS, getInitialFocusDate } from './data/mockData';
-import { ThemeProvider, useTheme } from './contexts/ThemeContext';
-
-export type ViewMode = 'Day' | 'Week' | 'Month';
-export type AppScreen = 'dashboard' | 'calendar' | 'arbor';
+import { mockEvents, CalendarEvent, getInitialFocusDate } from './data/mockData';
+import { ThemeProvider } from './contexts/ThemeContext';
+import { ViewMode } from './types/app';
 
 const ArborAuraApp = React.lazy(() => import('../arbor-&-aura/src/App'));
+
+export type AppScreen = 'dashboard' | 'calendar' | 'arbor';
 
 function MascotDock() {
   return (
@@ -34,49 +31,14 @@ function MascotDock() {
 }
 
 function AppContent() {
-  const { backgroundImage } = useTheme();
   const [currentDate, setCurrentDate] = useState(() => getInitialFocusDate(mockEvents));
   const [events, setEvents] = useState<CalendarEvent[]>(mockEvents);
-  const [activeScreen, setActiveScreen] = useState<AppScreen>('dashboard');
   const [view, setView] = useState<ViewMode>('Week');
-  const [selectedCalendars, setSelectedCalendars] = useState<Set<string>>(
-    () => new Set(CALENDARS.map((calendar) => calendar.id)),
-  );
+  const [calendarSearchQuery, setCalendarSearchQuery] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState<CalendarEvent | null>(null);
   const [selectedTime, setSelectedTime] = useState<string | null>(null);
-  const [searchQuery, setSearchQuery] = useState('');
-
-  const filteredEvents = useMemo(() => {
-    const normalizedQuery = searchQuery.trim().toLowerCase();
-
-    return events.filter((event) => {
-      const matchesCalendar = selectedCalendars.has(event.calendarId);
-      const matchesSearch =
-        normalizedQuery.length === 0 ||
-        event.title.toLowerCase().includes(normalizedQuery) ||
-        event.description?.toLowerCase().includes(normalizedQuery) ||
-        event.location?.toLowerCase().includes(normalizedQuery);
-
-      return matchesCalendar && matchesSearch;
-    });
-  }, [events, selectedCalendars, searchQuery]);
-
-  const handleToggleCalendar = (id: string) => {
-    setSelectedCalendars((current) => {
-      const next = new Set(current);
-      if (next.has(id)) next.delete(id);
-      else next.add(id);
-      return next;
-    });
-  };
-
-  const handleAddEvent = () => {
-    setSelectedEvent(null);
-    setSelectedTime(null);
-    setIsModalOpen(true);
-  };
 
   const handleEventClick = (event: CalendarEvent) => {
     setSelectedEvent(event);
@@ -112,74 +74,33 @@ function AppContent() {
   };
 
   return (
-    <div className="relative min-h-screen overflow-hidden font-sans">
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(5,159,197,0.24),_transparent_28%),radial-gradient(circle_at_bottom_right,_rgba(239,142,59,0.14),_transparent_32%),linear-gradient(180deg,_#071118_0%,_#02070a_100%)]" />
-
-      <div className="relative p-3 sm:p-4 lg:p-6">
-        <div className="glass-panel relative flex h-[calc(100vh-1.5rem)] flex-col overflow-hidden rounded-[30px] border border-white/10 bg-white/88 text-zinc-900 shadow-[0_32px_120px_rgba(3,12,15,0.48)] dark:bg-zinc-950/78 dark:text-zinc-100 lg:flex-row">
-          {backgroundImage && (
-            <div
-              className="pointer-events-none absolute inset-0 opacity-10"
-              style={{
-                backgroundImage: `url(${backgroundImage})`,
-                backgroundPosition: 'center',
-                backgroundSize: 'cover',
-              }}
-            />
-          )}
-          <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(135deg,rgba(5,159,197,0.08),transparent_38%,rgba(239,142,59,0.08))]" />
-
-          <div className="relative z-10 flex h-full min-h-0 w-full flex-1 flex-col lg:flex-row">
-            <Sidebar
-              activeScreen={activeScreen}
-              onScreenChange={setActiveScreen}
-              currentDate={currentDate}
-              onDateChange={setCurrentDate}
-              events={filteredEvents}
-              onAddEvent={handleAddEvent}
-              onEventClick={handleEventClick}
-              selectedCalendars={selectedCalendars}
-              onToggleCalendar={handleToggleCalendar}
-              onOpenSettings={() => setIsSettingsOpen(true)}
-            />
-            {activeScreen === 'dashboard' ? (
-              <DashboardScreen
-                currentDate={currentDate}
-                events={filteredEvents}
-                onOpenCalendar={() => setActiveScreen('calendar')}
-              />
-            ) : activeScreen === 'arbor' ? (
-              <Suspense
-                fallback={
-                  <section className="flex h-full min-h-0 flex-1 items-center justify-center bg-zinc-950/40">
-                    <div className="rounded-3xl border border-white/10 bg-black/30 px-6 py-5 text-center backdrop-blur">
-                      <p className="text-[11px] uppercase tracking-[0.3em] text-zinc-500">Loading</p>
-                      <p className="mt-2 text-sm text-zinc-200">ReadWorks research workspace is being prepared.</p>
-                    </div>
-                  </section>
-                }
-              >
-                <ArborAuraApp embedded />
-              </Suspense>
-            ) : (
-              <MainContent
-                currentDate={currentDate}
-                onDateChange={setCurrentDate}
-                events={filteredEvents}
-                onEventClick={handleEventClick}
-                onGridClick={handleGridClick}
-                view={view}
-                onViewChange={setView}
-                searchQuery={searchQuery}
-                onSearchChange={setSearchQuery}
-              />
-            )}
+    <>
+      <React.Suspense
+        fallback={
+          <div className="flex min-h-screen items-center justify-center bg-[radial-gradient(circle_at_top_left,_rgba(5,159,197,0.24),_transparent_28%),radial-gradient(circle_at_bottom_right,_rgba(239,142,59,0.14),_transparent_32%),linear-gradient(180deg,_#071118_0%,_#02070a_100%)] text-zinc-100">
+            <div className="rounded-3xl border border-white/10 bg-black/30 px-6 py-5 text-center backdrop-blur">
+              <p className="text-[11px] uppercase tracking-[0.3em] text-zinc-500">Loading</p>
+              <p className="mt-2 text-sm text-zinc-200">ReadWorks research workspace is being prepared.</p>
+            </div>
           </div>
-        </div>
-      </div>
+        }
+      >
+        <ArborAuraApp
+          currentDate={currentDate}
+          onDateChange={setCurrentDate}
+          events={events}
+          onEventClick={handleEventClick}
+          onGridClick={handleGridClick}
+          calendarView={view}
+          onCalendarViewChange={setView}
+          calendarSearchQuery={calendarSearchQuery}
+          onCalendarSearchChange={setCalendarSearchQuery}
+          onOpenSettings={() => setIsSettingsOpen(true)}
+        />
+      </React.Suspense>
 
       <EventModal
-        isOpen={activeScreen === 'calendar' && isModalOpen}
+        isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         onSave={handleSaveEvent}
         onDelete={handleDeleteEvent}
@@ -189,7 +110,7 @@ function AppContent() {
       />
       <SettingsModal isOpen={isSettingsOpen} onClose={() => setIsSettingsOpen(false)} />
       <MascotDock />
-    </div>
+    </>
   );
 }
 

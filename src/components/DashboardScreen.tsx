@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { ArrowUpRight, BookOpen, CalendarDays, GraduationCap, Handshake, Sparkles } from 'lucide-react';
+import { BookOpen, CalendarDays, GraduationCap, Sparkles } from 'lucide-react';
 import { format, isSameDay } from 'date-fns';
 import { CALENDARS, CalendarEvent } from '../data/mockData';
 import { cn } from '../utils/cn';
@@ -7,7 +7,6 @@ import { cn } from '../utils/cn';
 interface DashboardScreenProps {
   currentDate: Date;
   events: CalendarEvent[];
-  onOpenCalendar: () => void;
 }
 
 const impactBars = [
@@ -28,8 +27,8 @@ const programSignals = [
   },
   {
     label: 'Survey 2025',
-    value: '95%',
-    note: 'ReadWorks reported 95% satisfaction in the Fall 2025 survey of nearly 7,000 users.',
+    value: '6,956',
+    note: 'The February 4, 2026 survey summary says 6,956 educators, specialists, parents, and administrators participated.',
     width: 78,
     tone: 'orange',
   },
@@ -41,9 +40,9 @@ const programSignals = [
     tone: 'violet',
   },
   {
-    label: 'Integrations',
-    value: '3',
-    note: 'ReadWorks highlights ClassLink, Clever, and Google Classroom in its onboarding ecosystem.',
+    label: 'Student Library',
+    value: '1000s',
+    note: 'Official student-library materials position the library as a choice-based independent reading space with daily recommendations.',
     width: 58,
     tone: 'green',
   },
@@ -53,6 +52,21 @@ const researchNotes = [
   'ReadWorks says it serves all 50 states and reaches 93% of the nation’s lowest-income K-8 schools.',
   'The action research guide gives teachers a six-week intervention model using Article-A-Day and decodables.',
   'The portal uses official webinar dates and support pages, then layers representative staff work on top.',
+];
+
+const publicUpdates = [
+  {
+    title: 'February 24, 2026 update',
+    note: 'ReadWorks bundled board, survey, and research-study news into one monthly update for supporters and educators.',
+  },
+  {
+    title: 'Google for Education partnership',
+    note: 'The official Google partnership post highlights the Classroom add-on, Sign in with Google, and ReadAlong support.',
+  },
+  {
+    title: 'Student access and offline mode',
+    note: 'Student-facing materials now give the portal a concrete access story for library reading, offline work, and device support.',
+  },
 ];
 
 const statusToneClasses = {
@@ -65,7 +79,10 @@ const statusToneClasses = {
 
 const calendarLabelById = Object.fromEntries(CALENDARS.map((calendar) => [calendar.id, calendar.name]));
 
-export function DashboardScreen({ currentDate, events, onOpenCalendar }: DashboardScreenProps) {
+export function DashboardScreen({
+  currentDate,
+  events,
+}: DashboardScreenProps) {
   const metrics = useMemo(() => {
     const todayEvents = events.filter((event) => isSameDay(event.start, currentDate));
     const articleItems = events.filter((event) => event.calendarId === 'article-a-day').length;
@@ -119,8 +136,8 @@ export function DashboardScreen({ currentDate, events, onOpenCalendar }: Dashboa
 
   return (
     <section className="flex h-full flex-1 flex-col overflow-hidden bg-transparent">
-      <div className="border-b border-zinc-200/70 px-5 py-5 dark:border-zinc-800/80 sm:px-6">
-        <div className="flex flex-col gap-5 xl:flex-row xl:items-start xl:justify-between">
+      <div className="border-b border-zinc-200/70 px-5 py-5 dark:border-zinc-800/80 sm:px-6 xl:px-7">
+        <div className="flex flex-col gap-5">
           <div className="space-y-4">
             <div className="flex flex-wrap items-center gap-2">
               <span className="rounded-full border border-accent/25 bg-accent/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.28em] text-[color:var(--color-accent-text)] dark:text-[color:var(--color-accent)]">
@@ -140,21 +157,13 @@ export function DashboardScreen({ currentDate, events, onOpenCalendar }: Dashboa
               </p>
             </div>
           </div>
-
-          <button
-            onClick={onOpenCalendar}
-            className="inline-flex items-center justify-center gap-2 self-start rounded-2xl bg-zinc-950 px-5 py-3 text-sm font-medium text-white transition-colors hover:bg-zinc-800 dark:bg-white dark:text-zinc-950 dark:hover:bg-zinc-200"
-          >
-            Open calendar
-            <ArrowUpRight size={16} />
-          </button>
         </div>
       </div>
 
-      <div className="custom-scrollbar flex-1 overflow-y-auto p-4 sm:p-5">
-        <div className="grid gap-4 xl:grid-cols-[1.2fr_0.8fr]">
+      <div className="custom-scrollbar flex-1 overflow-y-auto p-4 sm:p-5 xl:p-6">
+        <div className="grid gap-4 2xl:grid-cols-[minmax(0,1.18fr)_minmax(360px,0.82fr)]">
           <div className="space-y-4">
-            <div className="grid gap-4 md:grid-cols-2 2xl:grid-cols-4">
+            <div className="grid gap-4 sm:grid-cols-2 2xl:grid-cols-4">
               {metrics.map((metric) => {
                 const Icon = metric.icon;
 
@@ -180,7 +189,7 @@ export function DashboardScreen({ currentDate, events, onOpenCalendar }: Dashboa
               })}
             </div>
 
-            <div className="grid gap-4 lg:grid-cols-[1.06fr_0.94fr]">
+            <div className="grid gap-4 2xl:grid-cols-[1.05fr_0.95fr]">
               <div className="rounded-[28px] border border-zinc-200/80 bg-white/85 p-5 shadow-sm dark:border-zinc-800 dark:bg-zinc-900/70">
                 <div className="flex items-end justify-between gap-4">
                   <div>
@@ -302,6 +311,27 @@ export function DashboardScreen({ currentDate, events, onOpenCalendar }: Dashboa
                       </span>
                     </div>
                     {item.location && <p className="mt-3 text-sm text-zinc-300">{item.location}</p>}
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="rounded-[28px] border border-zinc-200/80 bg-white/85 p-5 shadow-sm dark:border-zinc-800 dark:bg-zinc-900/70">
+              <p className="text-[11px] uppercase tracking-[0.28em] text-zinc-500 dark:text-zinc-400">
+                Public updates
+              </p>
+              <h2 className="mt-2 text-2xl font-semibold tracking-tight text-zinc-950 dark:text-zinc-50">
+                Current research and access signals
+              </h2>
+
+              <div className="mt-6 space-y-3">
+                {publicUpdates.map((item) => (
+                  <div
+                    key={item.title}
+                    className="rounded-2xl border border-zinc-200/70 bg-zinc-50/70 p-4 dark:border-zinc-800 dark:bg-zinc-950/55"
+                  >
+                    <p className="text-sm font-medium text-zinc-900 dark:text-zinc-100">{item.title}</p>
+                    <p className="mt-2 text-sm leading-6 text-zinc-600 dark:text-zinc-400">{item.note}</p>
                   </div>
                 ))}
               </div>

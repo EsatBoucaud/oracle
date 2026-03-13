@@ -18,7 +18,7 @@ import {
 } from 'date-fns';
 import { cn } from '../utils/cn';
 import { CalendarEvent } from '../data/mockData';
-import { ViewMode } from '../App';
+import { ViewMode } from '../types/app';
 import { motion, AnimatePresence } from 'framer-motion';
 
 interface MainContentProps {
@@ -31,6 +31,7 @@ interface MainContentProps {
   onViewChange: (view: ViewMode) => void;
   searchQuery: string;
   onSearchChange: (query: string) => void;
+  externalControls?: boolean;
 }
 
 interface CalendarViewProps {
@@ -337,6 +338,7 @@ export function MainContent({
   onViewChange,
   searchQuery,
   onSearchChange,
+  externalControls = false,
 }: MainContentProps) {
   const nextPeriod = () => {
     if (view === 'Month') onDateChange(addMonths(currentDate, 1));
@@ -383,9 +385,25 @@ export function MainContent({
     );
   }, [currentDate, events, view]);
 
+  const filteredVisibleEvents = useMemo(() => {
+    const normalizedSearch = searchQuery.trim().toLowerCase();
+
+    if (!normalizedSearch) {
+      return visibleEvents;
+    }
+
+    return visibleEvents.filter((event) =>
+      [event.title, event.description, event.location, event.calendarId]
+        .filter(Boolean)
+        .join(' ')
+        .toLowerCase()
+        .includes(normalizedSearch),
+    );
+  }, [searchQuery, visibleEvents]);
+
   const upcomingVisibleEvents = useMemo(
-    () => visibleEvents.slice().sort((a, b) => a.start.getTime() - b.start.getTime()).slice(0, 4),
-    [visibleEvents],
+    () => filteredVisibleEvents.slice().sort((a, b) => a.start.getTime() - b.start.getTime()).slice(0, 4),
+    [filteredVisibleEvents],
   );
 
   const nextScheduledEvent = useMemo(() => {
@@ -429,8 +447,8 @@ export function MainContent({
 
   return (
     <section className="flex h-full min-h-0 flex-1 flex-col overflow-hidden bg-transparent">
-      <div className="border-b border-zinc-200/70 px-5 py-4 dark:border-zinc-800/80 sm:px-6">
-        <div className="flex flex-col gap-4 xl:flex-row xl:items-start xl:justify-between">
+      <div className="border-b border-zinc-200/70 px-5 py-4 dark:border-zinc-800/80 sm:px-6 xl:px-7">
+        <div className="flex flex-col gap-4 2xl:flex-row 2xl:items-start 2xl:justify-between">
           <div className="space-y-3">
             <div className="flex flex-wrap items-center gap-2">
               <span className="rounded-full border border-accent/25 bg-accent/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.28em] text-[color:var(--color-accent-text)] dark:text-[color:var(--color-accent)]">
@@ -449,11 +467,11 @@ export function MainContent({
                 Keep ReadWorks scheduling front and center. The overview stays on the dashboard screen.
               </p>
               <p className="mt-2 text-sm font-medium text-zinc-700 dark:text-zinc-300">
-                {visibleEvents.length} pre-filled item{visibleEvents.length === 1 ? '' : 's'} in this {view.toLowerCase()} view.
+                {filteredVisibleEvents.length} pre-filled item{filteredVisibleEvents.length === 1 ? '' : 's'} in this {view.toLowerCase()} view.
               </p>
             </div>
 
-            <div className="grid gap-2 sm:grid-cols-4">
+            <div className="grid gap-2 sm:grid-cols-2 2xl:grid-cols-4">
               {summaryCards.map((card) => (
                 <div
                   key={card.label}
@@ -471,65 +489,67 @@ export function MainContent({
             </div>
           </div>
 
-          <div className="flex w-full max-w-xl flex-col gap-3 xl:items-end">
-            <div className="relative w-full">
-              <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400 dark:text-zinc-500" />
-              <input
-                type="text"
-                placeholder="Search ReadWorks programs, webinars, or districts"
-                value={searchQuery}
-                onChange={(e) => onSearchChange(e.target.value)}
-                className="w-full rounded-2xl border border-zinc-200/70 bg-white/85 py-3 pl-10 pr-4 text-sm outline-none transition-all focus:border-accent focus:ring-4 focus:ring-accent/10 dark:border-zinc-700/80 dark:bg-zinc-900/80 dark:text-zinc-100 dark:placeholder-zinc-500"
-              />
-            </div>
-
-            <div className="flex flex-col gap-3 lg:flex-row lg:items-center">
-              <div className="flex items-center justify-between rounded-2xl border border-zinc-200/70 bg-white/80 p-1 shadow-sm dark:border-zinc-700/80 dark:bg-zinc-900/80">
-                <button
-                  onClick={prevPeriod}
-                  className="rounded-xl p-2 text-zinc-600 transition-colors hover:bg-zinc-100 dark:text-zinc-400 dark:hover:bg-zinc-800"
-                >
-                  <ChevronLeft size={16} />
-                </button>
-                <button
-                  onClick={goToday}
-                  className="rounded-xl px-4 py-2 text-sm font-medium text-zinc-800 transition-colors hover:bg-zinc-100 dark:text-zinc-200 dark:hover:bg-zinc-800"
-                >
-                  Today
-                </button>
-                <button
-                  onClick={nextPeriod}
-                  className="rounded-xl p-2 text-zinc-600 transition-colors hover:bg-zinc-100 dark:text-zinc-400 dark:hover:bg-zinc-800"
-                >
-                  <ChevronRight size={16} />
-                </button>
+          {!externalControls && (
+            <div className="flex w-full max-w-[720px] flex-col gap-3 2xl:max-w-xl 2xl:items-end">
+              <div className="relative w-full">
+                <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400 dark:text-zinc-500" />
+                <input
+                  type="text"
+                  placeholder="Search ReadWorks programs, webinars, or districts"
+                  value={searchQuery}
+                  onChange={(e) => onSearchChange(e.target.value)}
+                  className="w-full rounded-2xl border border-zinc-200/70 bg-white/85 py-3 pl-10 pr-4 text-sm outline-none transition-all focus:border-accent focus:ring-4 focus:ring-accent/10 dark:border-zinc-700/80 dark:bg-zinc-900/80 dark:text-zinc-100 dark:placeholder-zinc-500"
+                />
               </div>
 
-              <div className="flex items-center rounded-2xl border border-zinc-200/70 bg-white/80 p-1 shadow-sm dark:border-zinc-700/80 dark:bg-zinc-900/80">
-                {['Day', 'Week', 'Month'].map((value) => (
+              <div className="flex flex-col gap-3 lg:flex-row lg:items-center">
+                <div className="flex items-center justify-between rounded-2xl border border-zinc-200/70 bg-white/80 p-1 shadow-sm dark:border-zinc-700/80 dark:bg-zinc-900/80">
                   <button
-                    key={value}
-                    onClick={() => onViewChange(value as ViewMode)}
-                    className={cn(
-                      'rounded-xl px-4 py-2 text-sm font-medium transition-all',
-                      view === value
-                        ? 'bg-zinc-950 text-white dark:bg-white dark:text-zinc-950'
-                        : 'text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100',
-                    )}
+                    onClick={prevPeriod}
+                    className="rounded-xl p-2 text-zinc-600 transition-colors hover:bg-zinc-100 dark:text-zinc-400 dark:hover:bg-zinc-800"
                   >
-                    {value}
+                    <ChevronLeft size={16} />
                   </button>
-                ))}
+                  <button
+                    onClick={goToday}
+                    className="rounded-xl px-4 py-2 text-sm font-medium text-zinc-800 transition-colors hover:bg-zinc-100 dark:text-zinc-200 dark:hover:bg-zinc-800"
+                  >
+                    Today
+                  </button>
+                  <button
+                    onClick={nextPeriod}
+                    className="rounded-xl p-2 text-zinc-600 transition-colors hover:bg-zinc-100 dark:text-zinc-400 dark:hover:bg-zinc-800"
+                  >
+                    <ChevronRight size={16} />
+                  </button>
+                </div>
+
+                <div className="flex items-center rounded-2xl border border-zinc-200/70 bg-white/80 p-1 shadow-sm dark:border-zinc-700/80 dark:bg-zinc-900/80">
+                  {['Day', 'Week', 'Month'].map((value) => (
+                    <button
+                      key={value}
+                      onClick={() => onViewChange(value as ViewMode)}
+                      className={cn(
+                        'rounded-xl px-4 py-2 text-sm font-medium transition-all',
+                        view === value
+                          ? 'bg-zinc-950 text-white dark:bg-white dark:text-zinc-950'
+                          : 'text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100',
+                      )}
+                    >
+                      {value}
+                    </button>
+                  ))}
+                </div>
               </div>
             </div>
-          </div>
+          )}
         </div>
       </div>
 
-      <div className="relative flex-1 min-h-0 overflow-hidden bg-transparent p-3 sm:p-4">
-        <div className="absolute inset-4 flex flex-col overflow-hidden rounded-[28px] border border-zinc-200/80 bg-white/85 shadow-[0_18px_50px_rgba(15,23,42,0.08)] dark:border-zinc-800 dark:bg-zinc-950/75">
+      <div className="relative flex-1 min-h-0 overflow-hidden bg-transparent p-3 sm:p-4 xl:p-5">
+        <div className="absolute inset-3 flex flex-col overflow-hidden rounded-[28px] border border-zinc-200/80 bg-white/85 shadow-[0_18px_50px_rgba(15,23,42,0.08)] sm:inset-4 xl:inset-5 dark:border-zinc-800 dark:bg-zinc-950/75">
           <div className="border-b border-zinc-200/80 bg-zinc-50/70 px-4 py-3 dark:border-zinc-800 dark:bg-zinc-900/70">
-            {visibleEvents.length > 0 ? (
+            {filteredVisibleEvents.length > 0 ? (
               <div className="flex flex-wrap items-center gap-2">
                 {upcomingVisibleEvents.map((event) => (
                   <button
@@ -552,13 +572,13 @@ export function MainContent({
               <div className="flex flex-wrap items-center justify-between gap-3">
                 <div>
                   <p className="text-sm font-medium text-zinc-900 dark:text-zinc-100">
-                    No scheduled items in this {view.toLowerCase()} window
+                    {searchQuery ? 'No matching schedule items' : `No scheduled items in this ${view.toLowerCase()} window`}
                   </p>
                   <p className="text-sm text-zinc-600 dark:text-zinc-400">
-                    Jump back to the nearest ReadWorks work block.
+                    {searchQuery ? 'Adjust the filter or move to another window.' : 'Jump back to the nearest ReadWorks work block.'}
                   </p>
                 </div>
-                {nextScheduledEvent && (
+                {nextScheduledEvent && !searchQuery && (
                   <button
                     onClick={() => onDateChange(nextScheduledEvent.start)}
                     className="rounded-2xl bg-zinc-950 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-zinc-800 dark:bg-white dark:text-zinc-950 dark:hover:bg-zinc-200"
@@ -581,14 +601,14 @@ export function MainContent({
               {view === 'Month' ? (
                 <MonthView
                   currentDate={currentDate}
-                  events={events}
+                  events={filteredVisibleEvents}
                   onEventClick={onEventClick}
                   onGridClick={onGridClick}
                 />
               ) : (
                 <WeekView
                   currentDate={currentDate}
-                  events={events}
+                  events={filteredVisibleEvents}
                   onEventClick={onEventClick}
                   onGridClick={onGridClick}
                   view={view}

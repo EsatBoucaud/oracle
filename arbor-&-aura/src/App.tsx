@@ -6,31 +6,73 @@ import { CommandPalette } from './components/CommandPalette';
 import { initialNodes } from './data';
 import { ArborNode, NodeType } from './types';
 import { motion, AnimatePresence } from 'motion/react';
-import { Search, Bell, Settings, User, Network, Columns, Command } from 'lucide-react';
+import {
+  Search,
+  Bell,
+  Settings,
+  User,
+  Network,
+  Columns,
+  Command,
+  PanelLeftClose,
+  PanelLeftOpen,
+  Sparkles,
+} from 'lucide-react';
+import type { CalendarEvent } from '../../src/data/mockData';
+import type { ViewMode as CalendarViewMode } from '../../src/types/app';
 
 type ViewMode = 'split' | 'constellation';
 
 interface ArborAuraAppProps {
   embedded?: boolean;
+  currentDate: Date;
+  onDateChange: (date: Date) => void;
+  events: CalendarEvent[];
+  onEventClick: (event: CalendarEvent) => void;
+  onGridClick: (date: Date, time: string) => void;
+  calendarView: CalendarViewMode;
+  onCalendarViewChange: (view: CalendarViewMode) => void;
+  calendarSearchQuery: string;
+  onCalendarSearchChange: (query: string) => void;
+  onOpenSettings?: () => void;
 }
 
-export default function App({ embedded = false }: ArborAuraAppProps) {
+export default function App({
+  embedded = false,
+  currentDate,
+  onDateChange,
+  events,
+  onEventClick,
+  onGridClick,
+  calendarView,
+  onCalendarViewChange,
+  calendarSearchQuery,
+  onCalendarSearchChange,
+  onOpenSettings,
+}: ArborAuraAppProps) {
   const [nodes, setNodes] = useState<ArborNode[]>(initialNodes);
-  const [activeId, setActiveId] = useState<string | null>('root-1');
-  const [expandedIds, setExpandedIds] = useState<Set<string>>(new Set(['root-1', 'c-1', 'c-2', 'root-2', 'c-3']));
+  const [activeId, setActiveId] = useState<string | null>('root-home');
+  const [expandedIds, setExpandedIds] = useState<Set<string>>(new Set(['root-home', 'root-7', 'root-4', 'root-1', 'c-1', 'c-2', 'root-2', 'c-3']));
   const [hoveredId, setHoveredId] = useState<string | null>(null);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [searchQuery, setSearchQuery] = useState('');
   const [viewMode, setViewMode] = useState<ViewMode>('split');
   const [isCommandPaletteOpen, setIsCommandPaletteOpen] = useState(false);
+  const [treePaneWidth, setTreePaneWidth] = useState(360);
+  const [isTreeCollapsed, setIsTreeCollapsed] = useState(false);
+  const [isTreeResizing, setIsTreeResizing] = useState(false);
+  const [mobilePane, setMobilePane] = useState<'tree' | 'workspace'>('workspace');
 
   useEffect(() => {
+    if (viewMode !== 'split') return;
+
     const handleMouseMove = (e: MouseEvent) => {
       setMousePos({ x: e.clientX, y: e.clientY });
     };
+
     window.addEventListener('mousemove', handleMouseMove);
     return () => window.removeEventListener('mousemove', handleMouseMove);
-  }, []);
+  }, [viewMode]);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -42,6 +84,27 @@ export default function App({ embedded = false }: ArborAuraAppProps) {
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
+
+  useEffect(() => {
+    if (!isTreeResizing) return;
+
+    const handleMouseMove = (e: MouseEvent) => {
+      const nextWidth = Math.min(520, Math.max(280, e.clientX));
+      setTreePaneWidth(nextWidth);
+    };
+
+    const handleMouseUp = () => {
+      setIsTreeResizing(false);
+    };
+
+    window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('mouseup', handleMouseUp);
+
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('mouseup', handleMouseUp);
+    };
+  }, [isTreeResizing]);
 
   const handleToggleExpand = (id: string) => {
     const next = new Set(expandedIds);
@@ -61,13 +124,11 @@ export default function App({ embedded = false }: ArborAuraAppProps) {
     };
     setNodes((prev) => [...prev, newNode]);
     setActiveId(newNode.id);
-    if (parentId) {
-      setExpandedIds((current) => {
-        const nextExpanded = new Set(current);
-        nextExpanded.add(parentId);
-        return nextExpanded;
-      });
-    }
+    setExpandedIds((current) => {
+      const nextExpanded = new Set(current);
+      nextExpanded.add(parentId ?? newNode.id);
+      return nextExpanded;
+    });
     setViewMode('split'); // Switch back to split view to edit
   };
 
@@ -130,6 +191,55 @@ export default function App({ embedded = false }: ArborAuraAppProps) {
     return null;
   };
   const previewImage = hoveredId ? getFirstImage(hoveredId) : null;
+  const activeNode = nodes.find((node) => node.id === activeId) ?? null;
+  const activeRoot = useMemo(() => {
+    let current = activeNode;
+
+    while (current?.parentId) {
+      current = nodes.find((node) => node.id === current?.parentId) ?? null;
+    }
+
+    return current ?? activeNode;
+  }, [activeNode, nodes]);
+
+  const focusNode = (id: string | null) => {
+    if (!id) return;
+
+    setActiveId(id);
+    setViewMode('split');
+    setMobilePane('workspace');
+    setExpandedIds((current) => {
+      const nextExpanded = new Set(current);
+      let currentNode = nodes.find((node) => node.id === id);
+
+      while (currentNode) {
+        nextExpanded.add(currentNode.id);
+        currentNode = nodes.find((node) => node.id === currentNode?.parentId);
+      }
+
+      return nextExpanded;
+    });
+  };
+
+  const handleSelectNode = (id: string) => {
+    setActiveId(id);
+    setMobilePane('workspace');
+    setExpandedIds((current) => {
+      const nextExpanded = new Set(current);
+      let currentNode = nodes.find((node) => node.id === id);
+
+      while (currentNode) {
+        nextExpanded.add(currentNode.id);
+        currentNode = nodes.find((node) => node.id === currentNode?.parentId);
+      }
+
+      return nextExpanded;
+    });
+  };
+
+  const handleOpenPromptHome = () => {
+    focusNode('root-home');
+  };
 
   // Determine ambient color based on active node lineage
   const ambientColor = useMemo(() => {
@@ -188,6 +298,18 @@ export default function App({ embedded = false }: ArborAuraAppProps) {
             </button>
           </div>
 
+          <button
+            onClick={handleOpenPromptHome}
+            className={`hidden md:inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-xs font-medium transition-colors ${
+              activeRoot?.id === 'root-home'
+                ? 'border-white/20 bg-white/16 text-white'
+                : 'border-white/10 bg-white/5 text-white/68 hover:bg-white/10 hover:text-white'
+            }`}
+          >
+            <Sparkles className="h-3.5 w-3.5" />
+            Prompt home
+          </button>
+
           <button 
             onClick={() => setIsCommandPaletteOpen(true)}
             className="hidden md:flex items-center gap-3 bg-white/5 border border-white/10 rounded-full pl-4 pr-2 py-1.5 text-sm w-72 hover:bg-white/10 transition-all text-white/50 hover:text-white/80"
@@ -201,12 +323,71 @@ export default function App({ embedded = false }: ArborAuraAppProps) {
         </div>
         <div className="flex items-center gap-4">
           <button className="text-white/50 hover:text-white transition-colors"><Bell className="w-4 h-4" /></button>
-          <button className="text-white/50 hover:text-white transition-colors"><Settings className="w-4 h-4" /></button>
+          <button onClick={onOpenSettings} className="text-white/50 hover:text-white transition-colors"><Settings className="w-4 h-4" /></button>
           <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-sky-500 to-teal-500 flex items-center justify-center border border-white/20">
             <User className="w-4 h-4 text-white" />
           </div>
         </div>
       </header>
+
+      {viewMode === 'split' && (
+        <div className="relative z-20 border-b border-white/10 bg-black/30 px-4 py-3 backdrop-blur-md md:px-6">
+          <div className="flex flex-col gap-3 xl:flex-row xl:items-center xl:justify-between">
+            <div className="flex flex-wrap items-center gap-2">
+              <div className="flex items-center rounded-full border border-white/10 bg-white/5 p-1 md:hidden">
+                <button
+                  onClick={() => setMobilePane('tree')}
+                  className={`rounded-full px-3 py-2 text-xs font-medium transition-colors ${
+                    mobilePane === 'tree' ? 'bg-white text-black' : 'text-white/60 hover:text-white'
+                  }`}
+                >
+                  Tree
+                </button>
+                <button
+                  onClick={() => setMobilePane('workspace')}
+                  className={`rounded-full px-3 py-2 text-xs font-medium transition-colors ${
+                    mobilePane === 'workspace' ? 'bg-white text-black' : 'text-white/60 hover:text-white'
+                  }`}
+                >
+                  Workspace
+                </button>
+              </div>
+
+              <button
+                onClick={() => setIsTreeCollapsed((current) => !current)}
+                className="hidden md:inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-2 text-xs font-medium text-white/80 transition-colors hover:bg-white/10"
+              >
+                {isTreeCollapsed ? <PanelLeftOpen className="h-3.5 w-3.5" /> : <PanelLeftClose className="h-3.5 w-3.5" />}
+                {isTreeCollapsed ? 'Show tree' : 'Hide tree'}
+              </button>
+
+              <div className="relative min-w-0 w-full flex-1 sm:min-w-[240px] xl:max-w-md">
+                <Search className="pointer-events-none absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-white/35" />
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="Filter the knowledge tree"
+                  className="w-full rounded-full border border-white/10 bg-white/5 py-2 pl-9 pr-4 text-sm text-white outline-none transition-colors placeholder:text-white/30 focus:border-white/20 focus:bg-white/10"
+                />
+              </div>
+            </div>
+
+            <div className="flex flex-wrap items-center gap-2 lg:justify-end">
+              {activeRoot && (
+                <div className="rounded-full border border-white/10 bg-white/5 px-3 py-2 text-[11px] font-mono uppercase tracking-[0.22em] text-white/55">
+                  Branch: {activeRoot.title}
+                </div>
+              )}
+              {activeNode && activeRoot?.id !== activeNode.id && (
+                <div className="rounded-full border border-white/10 bg-black/30 px-3 py-2 text-[11px] font-mono uppercase tracking-[0.22em] text-white/40">
+                  Node: {activeNode.title}
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
 
       <div className="flex flex-1 overflow-hidden relative z-10">
         <AnimatePresence mode="wait">
@@ -220,38 +401,65 @@ export default function App({ embedded = false }: ArborAuraAppProps) {
               className="flex w-full h-full"
             >
               {/* Left: The Knowledge Tree */}
-              <div className="w-full md:w-1/3 h-full overflow-y-auto custom-scrollbar px-6 md:px-10 relative border-r border-white/10 bg-black/20 backdrop-blur-xl shrink-0">
+              <div
+                className={`h-full overflow-y-auto custom-scrollbar relative bg-black/20 backdrop-blur-xl shrink-0 transition-all duration-300 ${
+                  isTreeCollapsed
+                    ? 'w-full md:w-0 md:border-r-0 md:px-0'
+                    : mobilePane === 'workspace'
+                      ? 'hidden border-r border-white/10 px-6 md:block md:w-[var(--tree-pane-width)] md:px-5 xl:px-6'
+                      : 'w-full border-r border-white/10 px-6 md:w-[var(--tree-pane-width)] md:px-5 xl:px-6'
+                }`}
+                style={isTreeCollapsed ? undefined : ({ '--tree-pane-width': `${treePaneWidth}px` } as React.CSSProperties)}
+              >
                 <AtmosphericTree 
                   nodes={nodes}
                   activeId={activeId}
                   expandedIds={expandedIds}
                   searchQuery={searchQuery}
-                  onSelect={setActiveId}
+                  onSelect={handleSelectNode}
                   onToggleExpand={handleToggleExpand}
                   onAddNode={handleAddNode}
                   onHover={setHoveredId}
                 />
               </div>
 
+              {!isTreeCollapsed && (
+                <div
+                  onMouseDown={() => setIsTreeResizing(true)}
+                  className="hidden w-3 shrink-0 cursor-col-resize items-stretch justify-center md:flex"
+                >
+                  <div className="w-px bg-white/10 transition-colors hover:bg-white/40" />
+                </div>
+              )}
+
               {/* Right: Concept Landing Page */}
-              <div className="hidden md:block flex-1 h-full relative z-0 bg-transparent">
+              <div className={`${mobilePane === 'workspace' ? 'block' : 'hidden'} md:block flex-1 h-full relative z-0 bg-transparent min-w-0`}>
+                {isTreeCollapsed && (
+                  <button
+                    onClick={() => setIsTreeCollapsed(false)}
+                    className="absolute left-4 top-4 z-30 inline-flex items-center gap-2 rounded-full border border-white/10 bg-black/50 px-3 py-2 text-xs font-medium text-white/85 backdrop-blur transition-colors hover:bg-black/70"
+                  >
+                    <PanelLeftOpen className="h-3.5 w-3.5" />
+                    Open tree
+                  </button>
+                )}
                 <ConceptBoard 
                   nodes={nodes} 
                   activeId={activeId} 
-                  onSelect={setActiveId}
+                  onSelect={handleSelectNode}
                   onUpdateNode={handleUpdateNode}
                   onEditNode={() => {}} // Placeholder, NodeEditor was removed in previous step to simplify, but we can re-add if needed
-                  onAddNode={(parentId, type) => {
-                    const newNode: ArborNode = {
-                      id: crypto.randomUUID(),
-                      parentId,
-                      title: `New ${type}`,
-                      type,
-                      updatedAt: new Date().toISOString().split('T')[0],
-                    };
-                    setNodes((current) => [...current, newNode]);
-                  }}
+                  onAddNode={handleAddNode}
                   onDeleteNode={handleDeleteNode}
+                  currentDate={currentDate}
+                  onDateChange={onDateChange}
+                  events={events}
+                  onEventClick={onEventClick}
+                  onGridClick={onGridClick}
+                  calendarView={calendarView}
+                  onCalendarViewChange={onCalendarViewChange}
+                  calendarSearchQuery={calendarSearchQuery}
+                  onCalendarSearchChange={onCalendarSearchChange}
                 />
               </div>
             </motion.div>
@@ -304,16 +512,7 @@ export default function App({ embedded = false }: ArborAuraAppProps) {
         onClose={() => setIsCommandPaletteOpen(false)}
         nodes={nodes}
         onSelect={(id) => {
-          setActiveId(id);
-          setViewMode('split');
-          // Auto-expand path
-          let current = nodes.find(n => n.id === id);
-          const nextExpanded = new Set(expandedIds);
-          while (current) {
-            nextExpanded.add(current.id);
-            current = nodes.find(n => n.id === current?.parentId);
-          }
-          setExpandedIds(nextExpanded);
+          focusNode(id);
         }}
       />
 
